@@ -406,6 +406,7 @@
 				C1C4F1FA1BADDB88007D851E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C1C4F1FB1BADDB88007D851E /* Build configuration list for PBXNativeTarget "PocketPoolTests" */ = {
 			isa = XCConfigurationList;
@@ -414,6 +415,7 @@
 				C1C4F1FD1BADDB88007D851E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
