@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="UGi-eX-bJS">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -105,10 +105,67 @@
                         <outlet property="cameraPhotoButton" destination="12R-BT-Fmb" id="3mA-Oe-oID"/>
                         <outlet property="libraryPhotoButton" destination="bfa-tV-yhB" id="2or-Bx-5be"/>
                         <outlet property="uploadedImageView" destination="468-O6-oa8" id="ngn-tV-oGO"/>
+                        <segue destination="UGi-eX-bJS" kind="presentation" identifier="UploadToTableSegue" id="Zee-Pf-wl5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
+        </scene>
+        <!--TableViewController-->
+        <scene sceneID="MUz-gm-0D6">
+            <objects>
+                <viewController title="TableViewController" id="UGi-eX-bJS" customClass="TableViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="tWJ-yo-BMW"/>
+                        <viewControllerLayoutGuide type="bottom" id="FGf-9u-T3Z"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="dQM-Kn-p6Y">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background" translatesAutoresizingMaskIntoConstraints="NO" id="Caa-r8-YxP">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </imageView>
+                            <view contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="gMJ-2g-AdD" customClass="TableView">
+                                <rect key="frame" x="16" y="16" width="568" height="568"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="YeT-ly-B7O" appends="YES" id="GFJ-9S-Y8S"/>
+                                    <outletCollection property="gestureRecognizers" destination="dnr-Qu-1tG" appends="YES" id="CLI-JI-FDG"/>
+                                </connections>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Caa-r8-YxP" firstAttribute="top" secondItem="dQM-Kn-p6Y" secondAttribute="topMargin" id="73l-0M-iUO"/>
+                            <constraint firstItem="FGf-9u-T3Z" firstAttribute="top" secondItem="gMJ-2g-AdD" secondAttribute="bottom" constant="16" id="8kD-Iu-6LM"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="gMJ-2g-AdD" secondAttribute="trailing" id="AKq-UY-RjF"/>
+                            <constraint firstAttribute="centerY" secondItem="gMJ-2g-AdD" secondAttribute="centerY" id="BQx-lP-tpo"/>
+                            <constraint firstAttribute="centerX" secondItem="gMJ-2g-AdD" secondAttribute="centerX" id="MAI-cx-KdE"/>
+                            <constraint firstItem="Caa-r8-YxP" firstAttribute="leading" secondItem="dQM-Kn-p6Y" secondAttribute="leadingMargin" constant="-16" id="Sxt-GN-T0g"/>
+                            <constraint firstItem="FGf-9u-T3Z" firstAttribute="top" secondItem="Caa-r8-YxP" secondAttribute="bottom" id="V2Q-Wa-cL2"/>
+                            <constraint firstItem="gMJ-2g-AdD" firstAttribute="leading" secondItem="dQM-Kn-p6Y" secondAttribute="leadingMargin" id="dYK-Lt-hdZ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Caa-r8-YxP" secondAttribute="trailing" constant="-16" id="kqA-Tr-fh6"/>
+                            <constraint firstItem="gMJ-2g-AdD" firstAttribute="top" secondItem="dQM-Kn-p6Y" secondAttribute="topMargin" constant="16" id="sdk-IN-RLR"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="gMJ-2g-AdD" id="oUs-Xe-87L"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YuN-DU-MbN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="YeT-ly-B7O">
+                    <connections>
+                        <action selector="handleTap:" destination="UGi-eX-bJS" id="6z8-NJ-JpG"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="dnr-Qu-1tG">
+                    <connections>
+                        <action selector="handlePan:" destination="UGi-eX-bJS" id="fyV-Ib-RtH"/>
+                    </connections>
+                </panGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="1124" y="214"/>
         </scene>
     </scenes>
     <resources>

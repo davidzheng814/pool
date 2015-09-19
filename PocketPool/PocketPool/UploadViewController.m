@@ -74,6 +74,23 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 - (void)setImageView {
     NSLog(@"setImageView called");
     self.uploadedImageView.image = self.uploadedImage;
+    [NSThread sleepForTimeInterval:0.2];
+    UIAlertView *waitAlert = [[UIAlertView alloc] initWithTitle:@"Loading..."
+                                                        message:@"Please wait while we analyze your image. Press OK to see pool table."
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                              otherButtonTitles:@"OK", nil];
+    [waitAlert show];
+}
+
+- (void)alertView:(UIAlertView *)alertView
+clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex == [alertView cancelButtonIndex]) { // Cancel clicked
+        self.uploadedImage = nil;
+        self.uploadedImageView.image = nil;
+    } else { // OK clicked
+        [self performSegueWithIdentifier: @"UploadToTableSegue" sender:self];
+    }
 }
 
 @end
