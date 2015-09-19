@@ -1,5 +1,5 @@
 //
-//  ViewController.m
+//  UploadViewController.m
 //  PocketPool
 //
 //  Created by Catheryn Li on 9/19/15.
@@ -43,7 +43,7 @@
                                                             otherButtonTitles:nil];
         [noPhotoLibraryAlert show];
     }
-
+    
 }
 
 - (IBAction)cameraPhotoButtonPressed:(id)sender {

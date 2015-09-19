@@ -4,7 +4,7 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>PoolLegend.xcscheme</key>
+		<key>PocketPool.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
@@ -12,12 +12,12 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>C11C4D0C1BADC1EB00047027</key>
+		<key>C1C4F1D41BADDB88007D851E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C11C4D251BADC1EB00047027</key>
+		<key>C1C4F1ED1BADDB88007D851E</key>
 		<dict>
 			<key>primary</key>
 			<true/>

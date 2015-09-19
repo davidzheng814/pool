@@ -5,7 +5,7 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>9DD8E80C-DB87-4118-B591-B22EA28BAEE8</string>
+	<string>7D4F70FA-E184-4906-9291-3784F2AF004C</string>
 	<key>IDESourceControlProjectName</key>
 	<string>PocketPool</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
@@ -14,7 +14,7 @@
 		<string>https://github.com/davidzheng814/Pool.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>PoolLegend/PocketPool.xcodeproj</string>
+	<string>PocketPool/PocketPool.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>B2594B83EF297080D79833020A16AE54AC481FFB</key>

@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C11C4D0C1BADC1EB00047027"
+               BlueprintIdentifier = "C1C4F1D41BADDB88007D851E"
                BuildableName = "PocketPool.app"
                BlueprintName = "PocketPool"
                ReferencedContainer = "container:PocketPool.xcodeproj">
@@ -28,7 +28,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C11C4D251BADC1EB00047027"
+               BlueprintIdentifier = "C1C4F1ED1BADDB88007D851E"
                BuildableName = "PocketPoolTests.xctest"
                BlueprintName = "PocketPoolTests"
                ReferencedContainer = "container:PocketPool.xcodeproj">
@@ -46,7 +46,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C11C4D251BADC1EB00047027"
+               BlueprintIdentifier = "C1C4F1ED1BADDB88007D851E"
                BuildableName = "PocketPoolTests.xctest"
                BlueprintName = "PocketPoolTests"
                ReferencedContainer = "container:PocketPool.xcodeproj">
@@ -56,7 +56,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C11C4D0C1BADC1EB00047027"
+            BlueprintIdentifier = "C1C4F1D41BADDB88007D851E"
             BuildableName = "PocketPool.app"
             BlueprintName = "PocketPool"
             ReferencedContainer = "container:PocketPool.xcodeproj">
@@ -76,7 +76,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C11C4D0C1BADC1EB00047027"
+            BlueprintIdentifier = "C1C4F1D41BADDB88007D851E"
             BuildableName = "PocketPool.app"
             BlueprintName = "PocketPool"
             ReferencedContainer = "container:PocketPool.xcodeproj">
@@ -95,7 +95,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C11C4D0C1BADC1EB00047027"
+            BlueprintIdentifier = "C1C4F1D41BADDB88007D851E"
             BuildableName = "PocketPool.app"
             BlueprintName = "PocketPool"
             ReferencedContainer = "container:PocketPool.xcodeproj">

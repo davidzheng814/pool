@@ -32,7 +32,7 @@
                                 <color key="shadowColor" red="0.44017610497237569" green="0.44017610497237569" blue="0.44017610497237569" alpha="1" colorSpace="calibratedRGB"/>
                                 <size key="shadowOffset" width="-1" height="-2"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pool Legend!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QEz-F9-vbV">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pocket Pool!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QEz-F9-vbV">
                                 <rect key="frame" x="127" y="109" width="173" height="29"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="173" id="sAe-eR-k9c"/>
