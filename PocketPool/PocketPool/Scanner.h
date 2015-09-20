@@ -9,6 +9,6 @@
 
 @interface Scanner : NSObject {}
 
-+ (int) find_table:(UIImage *)image withBalls:(NSArray *)ball;
++ (NSArray *) find_table:(UIImage *)image;
 
 @end
