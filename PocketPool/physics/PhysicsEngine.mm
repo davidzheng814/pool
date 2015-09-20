@@ -43,7 +43,7 @@ const double FRICTION = 0.1;
 const double RAIL_RES = 0.8;
 const double BALL_RES = 0.95;
 
-const double MAX_ANIMATION_LENGTH = .5;
+const double MAX_ANIMATION_LENGTH = 20;
 
 //Structure that holds a ball object
 struct ball {
@@ -300,7 +300,7 @@ void handleCollidePocketWall(ball &a, int pocketWallID) {
 }
 
 bool onTable(state cur, int ballID){
-    return cur.balls[ballID].inPocket == -1;
+    return cur.balls[ballID].pos.X == 1000000;
 }
 
 //From one state, calculates the next step
@@ -429,7 +429,7 @@ state* allStates(state beginning, int &numFrames) {
         
         cur = next(cur);
     }
-    free(cur.balls);
+//    free(cur.balls);
     return stateList;
 }
 

@@ -25,18 +25,23 @@
     // Setting up ball and finger positions
     
     // Create test/default ball positions
-//    NSMutableArray *defaultBallPositions = [NSMutableArray array];
-//    for (int i = 0; i < 16; i++) {
-//        CGPoint point = CGPointMake(50 + i * 26, 50 + i * 10);
-//        NSValue *value = [NSValue valueWithCGPoint:point];
-//        [defaultBallPositions addObject:value];
-//    }
-//    self.ballPositions = defaultBallPositions; // Remember to pull points out with [array[i] CGPointValue]
+    NSMutableArray *defaultBallPositions = [NSMutableArray array];
+    for (int i = 0; i < 3; i++) {
+        CGPoint point = CGPointMake(250 + i * 26, 250 + i * 10);
+        NSValue *value = [NSValue valueWithCGPoint:point];
+        [defaultBallPositions addObject:value];
+    }
+    for (int i = 0; i < 5; i++) {
+        CGPoint point = CGPointMake(250 - i * 26, 250 - i * 10);
+        NSValue *value = [NSValue valueWithCGPoint:point];
+        [defaultBallPositions addObject:value];
+    }
+    self.ballPositions = defaultBallPositions; // Remember to pull points out with [array[i] CGPointValue]
     
     // Send uploaded image to scanner
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     UIImage *uploadedImage = appDelegate.uploadedImage;
-    self.ballPositions = [Scanner find_table:uploadedImage];
+//    self.ballPositions = [Scanner find_table:uploadedImage];
     
     self.fingerPosition = CGPointMake(-1, -1);
     [self.tableView setUp];

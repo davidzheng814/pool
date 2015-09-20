@@ -583,7 +583,7 @@ Point2f mult(Mat m, Point2f p) {
         printf("BALL(%d) at %lf, %lf\n", i, points[i].x, points[i].y);
         Point2f transform = mult(transmtx, p);
         printf("(transformed at %lf, %lf\n", transform.x, transform.y);
-        if (transform.x < 0 || transform.x > H || transform.y < 0 || transform.y > W) continue;
+        if (transform.x < 0 || transform.x > W || transform.y < 0 || transform.y > H) continue;
         int ballcolor = getColor(p);
         printf("COLOR = %d\n", ballcolor);
         [ret setObject: [NSValue valueWithCGPoint: CGPointMake(transform.x, transform.y)] atIndexedSubscript:ballcolor];
