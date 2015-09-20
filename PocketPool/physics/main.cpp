@@ -547,44 +547,36 @@ vector getGhostImage(state cur, double angle){
   copyCue.vel = vector(cos(angle), sin(angle));
 
   double dt = 10000000;
-  for(int i = 0; i < n; ++i) {
-    if(onTable(cur, i)){
-      for(int j = 1; j < n; ++j) {
-        if(onTable(cur, j)){
-          double t = collideBalls(cur.balls[i], cur.balls[j], dt);
-          if (0 < t && t < dt) { dt = t; }
-        }
+  for(int j = 1; j < n; ++j) {
+    if(onTable(cur, j)){
+      double t = collideBalls(copyCue, cur.balls[j], dt);
+          if (0 < t && t < dt) { dt = t; 
+  printf("balls: %.2lf %d \n", dt, j);}
       }
-    }
   }
 
-  for(int i = 0; i < n; ++i) {
-    if(onTable(cur, i)){
-      for(int j = 0; j < 6; ++j) {
-        double t = collidePocket(cur.balls[i], j, dt);
-        if (0 < t && t < dt) { dt = t; }
-      }
-    }
+  for(int j = 0; j < 6; ++j) {
+    double t = collidePocket(copyCue, j, dt);
+    if (0 < t && t < dt) {
+      dt = t; 
+      printf("pocket: %2lf %d \n", dt, j);}
   }
 
-  for(int i = 0; i < n; ++i) {
-    if(onTable(cur,i)){
-      for(int j = 0; j < 4; ++j) {
-        double t = collideWall(cur.balls[i], j, dt);
-        if (0 < t && t < dt) { dt = t; }
-      }
-    }
+  for(int j = 0; j < 4; ++j) {
+    double t = collideWall(copyCue, j, dt);
+    if (0 < t && t < dt) {
+      dt = t; 
+      printf("wall: %.2lf %d \n", dt, j);}
   }
   
-  for(int i = 0; i < n; ++i) {
-    if(onTable(cur,i)){
-      for(int j = 0; j < 12; ++j) {
-        double t = collidePocketWall(cur.balls[i], j, dt);
-        if (0 < t && t < dt) { dt = t; }
-      }
-    }
+  for(int j = 0; j < 12; ++j) {
+    double t = collidePocketWall(copyCue, j, dt);
+    if (0 < t && t < dt) {
+      dt = t; 
+      printf("pocketwall: %.2lf %d \n", dt, j);}
   }
-
+  
+  printf("%.2lf \n", dt);
   copyCue.run(dt);
   return copyCue.pos;
 }
@@ -606,7 +598,7 @@ state makeDefaultState() {
   s.numballs = 4;
   s.balls = (ball *)malloc(s.numballs*sizeof(ball));
   for(int i = 0; i < s.numballs; ++i) {
-    s.balls[i] = ball(vector((rand() % 100) / 50., (rand() % 50) / 50.), i);
+    s.balls[i] = ball(vector((rand() % 100) / 50., (rand() % 60) / 60.), i);
     s.balls[i].vel = vector(rnd(), rnd());
   }
   return s;
@@ -629,5 +621,4 @@ int main() {
   static const int arr[] = {1,2,3};
   std::vector<int> v (arr, arr + sizeof(arr) / sizeof(arr[0]) );
   vector ghost = getGhostImage(cur, 0);
-  printf("%.4lf, %.4lf \n", ghost.X, ghost.Y);
 }
