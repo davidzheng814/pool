@@ -14,7 +14,7 @@ const double WIDTH = 3;
 const double HEIGHT = 1.5;
 const double FRICTION = 0.1;
 const double RAIL_RES = 0.75;
-const double BALL_RES = 0.98;
+const double BALL_RES = 0.95;
 
 struct ball {
   vector pos;
@@ -104,7 +104,7 @@ double collideWall(ball cur, int wallId, double dt) {
 
 double collidePocket(ball cur, int pockID, double dt) {
   double width = WIDTH, height = HEIGHT;
-  double x,y;
+  double x = 0,y = 0;
   if(pockID == 0){
     x = 0, y = 0;
   } else if (pockID == 1){
@@ -174,6 +174,7 @@ state next(state cur) {
         collidej = j;
         collideType = 1;
         dt = t;
+      }
     }
   }
 
@@ -218,11 +219,11 @@ double rnd() {
 state makeDefaultState() {
   state s;
   s.time = 0;
-  s.numballs = 10;
+  s.numballs = 1;
   s.balls = (ball *)malloc(s.numballs*sizeof(ball));
   for(int i = 0; i < s.numballs; ++i) {
-    s.balls[i] = ball(vector(.05 + i * 2.2 * BALL_RADIUS, .05), i);
-    s.balls[i].vel = vector(rnd(), rnd());
+    s.balls[i] = ball(vector(1.4, .15), i);
+    s.balls[i].vel = vector(.5, -.5);
   }
   return s;
 }
