@@ -8,12 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		5A732D271BAE19C600CE6927 /* Scanner.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A732D261BAE19C600CE6927 /* Scanner.mm */; };
-		5A732D2B1BAE220E00CE6927 /* sample2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5A732D2A1BAE220E00CE6927 /* sample2.jpg */; };
 		5AEAA89C1BAE1440000DEBB2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AEAA89B1BAE1440000DEBB2 /* UIKit.framework */; };
 		5AEAA89E1BAE1447000DEBB2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AEAA89D1BAE1447000DEBB2 /* Foundation.framework */; };
 		5AEAA8A01BAE1452000DEBB2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AEAA89F1BAE1452000DEBB2 /* CoreGraphics.framework */; };
 		7FF7A84A1BAE54FB009D2132 /* PhysicsEngine.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7FF7A8491BAE54FB009D2132 /* PhysicsEngine.mm */; };
-		7FF7A84C1BAE556B009D2132 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FF7A84B1BAE556B009D2132 /* opencv2.framework */; };
+		C18201D21BAEEC820083DB23 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FF7A84B1BAE556B009D2132 /* opencv2.framework */; };
 		C1C4F1DB1BADDB88007D851E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C1C4F1DA1BADDB88007D851E /* main.m */; };
 		C1C4F1DE1BADDB88007D851E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C1C4F1DD1BADDB88007D851E /* AppDelegate.m */; };
 		C1C4F1E11BADDB88007D851E /* UploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1C4F1E01BADDB88007D851E /* UploadViewController.m */; };
@@ -38,12 +37,12 @@
 		5A732D261BAE19C600CE6927 /* Scanner.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Scanner.mm; sourceTree = "<group>"; };
 		5A732D281BAE1A6800CE6927 /* PocketPool-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PocketPool-Prefix.pch"; sourceTree = "<group>"; };
 		5A732D291BAE1B0F00CE6927 /* Scanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scanner.h; sourceTree = "<group>"; };
-		5A732D2A1BAE220E00CE6927 /* sample2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = sample2.jpg; path = PocketPoolTests/sample2.jpg; sourceTree = SOURCE_ROOT; };
 		5AEAA89B1BAE1440000DEBB2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		5AEAA89D1BAE1447000DEBB2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		5AEAA89F1BAE1452000DEBB2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		7FF7A8491BAE54FB009D2132 /* PhysicsEngine.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PhysicsEngine.mm; path = physics/PhysicsEngine.mm; sourceTree = SOURCE_ROOT; };
 		7FF7A84B1BAE556B009D2132 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = ../opencv2.framework; sourceTree = "<group>"; };
+		C18201D31BAEEC9F0083DB23 /* PhysicsEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhysicsEngine.h; sourceTree = "<group>"; };
 		C1C4F1D51BADDB88007D851E /* PocketPool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PocketPool.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1C4F1D91BADDB88007D851E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C1C4F1DA1BADDB88007D851E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -68,7 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7FF7A84C1BAE556B009D2132 /* opencv2.framework in Frameworks */,
+				C18201D21BAEEC820083DB23 /* opencv2.framework in Frameworks */,
 				5AEAA8A01BAE1452000DEBB2 /* CoreGraphics.framework in Frameworks */,
 				5AEAA89E1BAE1447000DEBB2 /* Foundation.framework in Frameworks */,
 				5AEAA89C1BAE1440000DEBB2 /* UIKit.framework in Frameworks */,
@@ -118,14 +117,14 @@
 				C1DD41841BAE06EB006233B4 /* TableViewController.m */,
 				C1DD41861BAE08A6006233B4 /* TableView.h */,
 				C1DD41871BAE08A6006233B4 /* TableView.m */,
-				C1C4F2051BADDC31007D851E /* Main.storyboard */,
-				C1C4F1E51BADDB88007D851E /* Images.xcassets */,
-				5A732D2A1BAE220E00CE6927 /* sample2.jpg */,
-				C1C4F1E71BADDB88007D851E /* LaunchScreen.xib */,
-				C1C4F1D81BADDB88007D851E /* Supporting Files */,
-				5A732D261BAE19C600CE6927 /* Scanner.mm */,
+				C18201D31BAEEC9F0083DB23 /* PhysicsEngine.h */,
 				7FF7A8491BAE54FB009D2132 /* PhysicsEngine.mm */,
 				5A732D291BAE1B0F00CE6927 /* Scanner.h */,
+				5A732D261BAE19C600CE6927 /* Scanner.mm */,
+				C1C4F2051BADDC31007D851E /* Main.storyboard */,
+				C1C4F1E51BADDB88007D851E /* Images.xcassets */,
+				C1C4F1E71BADDB88007D851E /* LaunchScreen.xib */,
+				C1C4F1D81BADDB88007D851E /* Supporting Files */,
 			);
 			path = PocketPool;
 			sourceTree = "<group>";
@@ -246,7 +245,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A732D2B1BAE220E00CE6927 /* sample2.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,6 +383,7 @@
 					"$(inherited)",
 					"/Users/dzd123/Documents/2015-2016/OpenCV-iOS",
 					/Users/stevenhao/Documents/CODE/pool,
+					"/Users/catheryn/Documents/Code/davidzheng814:pool",
 				);
 				GCC_PREFIX_HEADER = "PocketPool/PocketPool-Prefix.pch";
 				INFOPLIST_FILE = PocketPool/Info.plist;
@@ -401,6 +400,7 @@
 					"$(inherited)",
 					"/Users/dzd123/Documents/2015-2016/OpenCV-iOS",
 					/Users/stevenhao/Documents/CODE/pool,
+					"/Users/catheryn/Documents/Code/davidzheng814:pool",
 				);
 				GCC_PREFIX_HEADER = "PocketPool/PocketPool-Prefix.pch";
 				INFOPLIST_FILE = PocketPool/Info.plist;

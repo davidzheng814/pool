@@ -8,6 +8,7 @@
 
 #import "TableViewController.h"
 #import "TableView.h"
+#import "PhysicsEngine.h"
 
 @interface TableViewController ()
 
@@ -100,19 +101,22 @@
 }
 
 - (void)releaseTap { // Table will animate
-    // Ask physics engine for frames
-    // Test frames:
-    NSMutableArray *ballFrames = [NSMutableArray array];
-    for (int j = 0; j < 20; j++) {
-        NSMutableArray *ballPositions = [NSMutableArray array];
-        for (int i = 0; i < 16; i++) {
-            CGPoint point = CGPointMake(50 + j * 5 + i * 26, 50 + j * 1 + i * 10);
-            NSValue *value = [NSValue valueWithCGPoint:point];
-            [ballPositions addObject:value];
-        }
-        [ballFrames addObject:ballPositions];
-//        [self.tableView animateImageWithBallPositions:ballPositions];
-    }
+    // Fetch frames from physics engine
+    NSArray *ballFrames = [PhysicsEngine findAllStates:self.ballPositions withFingerPosition:self.fingerPosition];
+    
+    // Create test frames:
+//    NSMutableArray *ballFrames = [NSMutableArray array];
+//    for (int j = 0; j < 20; j++) {
+//        NSMutableArray *ballPositions = [NSMutableArray array];
+//        for (int i = 0; i < 16; i++) {
+//            CGPoint point = CGPointMake(50 + j * 5 + i * 26, 50 + j * 1 + i * 10);
+//            NSValue *value = [NSValue valueWithCGPoint:point];
+//            [ballPositions addObject:value];
+//        }
+//        [ballFrames addObject:ballPositions];
+//    }
+    
+    // Animate
     [self.tableView animateImageWithBallFrames:ballFrames
                                      withIndex:0
                                   withMaxIndex:19];

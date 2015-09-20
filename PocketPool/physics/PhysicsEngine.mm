@@ -52,7 +52,8 @@ struct ball {
     int id;
     int inPocket; // 0 if not in pocket
     
-    ball();
+    ball() {
+    }
     ball(vector _pos, int _id) {
         pos = _pos;
         vel = vector();
@@ -254,6 +255,7 @@ double collidePocketWall(ball cur, int pockWallID, double dt) {
     }else if(pockWallID == 11){
         return collideCornerPocketWallHelper1(-(cur.pos.X - width), -(cur.pos.Y - height), vector(-cur.vel.X, -cur.vel.Y), dt);
     }
+    return 0;
 }
 
 //Adjusts velocities when two balls collide
@@ -555,11 +557,11 @@ state makeDefaultState() {
 //    printf("%.4lf \n", getBestMove(cur, v));
 //}
 
-+(NSArray *) findAllStates:(NSArray *)balls withFingerPosition:(CGPoint)fingerPosition {
++(NSArray *) findAllStates:(NSArray *)ballPositions withFingerPosition:(CGPoint)fingerPosition {
     ball balls_arr[16];
     int ind = 0;
     const double scale = 0.5;
-    for (NSValue *pointValue in balls) {
+    for (NSValue *pointValue in ballPositions) {
         CGPoint point = [pointValue CGPointValue];
         
         double x = point.x;

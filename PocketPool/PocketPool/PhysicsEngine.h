@@ -9,6 +9,6 @@
 
 @interface PhysicsEngine : NSObject {}
 
-+(NSArray *) findAllStates:(NSArray *)balls withFingerPosition:(CGPoint)fingerPosition;
++(NSArray *) findAllStates:(NSArray *)ballPositions withFingerPosition:(CGPoint)fingerPosition;
 
 @end

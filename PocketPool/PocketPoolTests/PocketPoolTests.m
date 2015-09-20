@@ -30,7 +30,7 @@
     // This is an example of a functional test case.
 //    XCTAssert(YES, @"Pass");
     UIImage *image = [UIImage imageNamed:@"sample2.jpg"];
-    [Scanner find_table:image];
+//    [Scanner find_table:image];
 }
 
 - (void)testPerformanceExample {
