@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <complex>
+#include <math.h>
 
 typedef std::complex<double> vector;
 
@@ -20,6 +21,8 @@ const double HEIGHT = 1.5;
 const double FRICTION = 0.1;
 const double RAIL_RES = 0.75;
 const double BALL_RES = 0.95;
+
+const double MAX_ANIMATION_LENGTH = .5;
 
 //Structure that holds a ball object
 struct ball {
@@ -200,7 +203,8 @@ void handleCollidePocketWall(ball &a, int pocketWallID) {
 
 //From one state, calculates the next step
 state next(state cur) {
-  double dt = DEFAULT_TIME_STEP;
+  double next_default_time = ceil(cur.time / DEFAULT_TIME_STEP +.0001) * DEFAULT_TIME_STEP;
+  double dt = next_default_time - cur.time;
   state nxt = cur;
   int n = cur.numballs;
 
@@ -273,12 +277,14 @@ double rnd() {
 state makeDefaultState() {
   state s;
   s.time = 0;
-  s.numballs = 1;
+  s.numballs = 2;
   s.balls = (ball *)malloc(s.numballs*sizeof(ball));
   for(int i = 0; i < s.numballs; ++i) {
-    s.balls[i] = ball(vector(1.4, .15), i);
-    s.balls[i].vel = vector(.5, -.5);
+    s.balls[i] = ball(vector(.5, .1), i);
+    s.balls[i].vel = vector(0, 1);
   }
+  s.balls[1].pos = vector(.5, 1);
+  s.balls[1].vel = vector(0,-1);
   return s;
 }
 
@@ -292,14 +298,47 @@ void disp(state cur) {
   printf("==============\n");
 }
 
+//Returns if x is close enough to an integer
+bool isInteger(double x){
+  double epsilon = .0001;
+  double fracPart = x - (int) x;
+  return ((fracPart < epsilon) || (fracPart > 1 - epsilon));
+}
+
+//Main method for the API
+//Returns an array of all the states
+state* allStates(state beginning) {
+  int numFrames = MAX_ANIMATION_LENGTH / DEFAULT_TIME_STEP + 1;
+  state *stateList = new state[numFrames];
+  state cur = beginning;
+  for(int i = 0; i < numFrames; ++i) {
+    while(!isInteger(cur.time / DEFAULT_TIME_STEP)){
+      cur = next(cur);
+    }
+    stateList[i] = cur;
+    stateList[i].balls = (ball*) malloc(sizeof(ball) * cur.numballs);
+    for(int j = 0; j < cur.numballs; ++j) {
+      stateList[i].balls[j] = cur.balls[j];
+    }
+    
+    cur = next(cur);
+  }
+  free(cur.balls);
+  return stateList;
+}
+
 //Whooo starts simulation
 int main() {
   state cur;
   cur = makeDefaultState();
   printf("STARTING SIMULATION\n");
-  disp(cur);
+  /*(disp(cur);
+   *for(int i = 0; i < 10; ++i) {
+   * cur = next(cur);
+   * disp(cur);
+  }*/
+  state *stateList = allStates(cur);
   for(int i = 0; i < 10; ++i) {
-    cur = next(cur);
-    disp(cur);
+    disp(stateList[i]);
   }
 }
