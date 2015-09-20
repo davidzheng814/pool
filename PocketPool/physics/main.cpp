@@ -1,7 +1,23 @@
+/*IMPORTANT API TO KNOW
+ball structure = vector pos, vector vel, int id, int inPocket (-1 if not in pocket)
+state structure = double time, int numballs, ball *balls
+
+Given a beginning state with time = 0, return a giant list of states that are the states at multiples of a time step
+state* allStates(state beginning)
+
+Gives the best possible to hit the cue ball (balls[0]) at
+idArray is the vector of the id's of balls that we can possibly sink
+-10 is the default "we have no good move" value
+
+double getBestMove(state cur, std::vector<int> idArray)
+
+*/
+
 #include <cstdio>
 #include <cstdlib>
 #include <complex>
 #include <math.h>
+#include <vector>
 
 typedef std::complex<double> vector;
 
@@ -384,29 +400,6 @@ double rnd() {
   return (rand() % 100 - 50) / 100.;
 }
 
-//Default state for our simulation
-state makeDefaultState() {
-  state s;
-  s.time = 0;
-  s.numballs = 1;
-  s.balls = (ball *)malloc(s.numballs*sizeof(ball));
-  for(int i = 0; i < s.numballs; ++i) {
-    s.balls[i] = ball(vector(.04, .1), i);
-    s.balls[i].vel = vector(0, -1);
-  }
-  return s;
-}
-
-//Displays stuff
-void disp(state cur) {
-  printf("TIME=%f\n", cur.time);
-  for(int i = 0; i < cur.numballs; ++i) {
-    ball &b = cur.balls[i];
-    printf("BALL(%d): p=(%.2lf, %.2lf) v=(%.2lf, %.4lf)\n", b.id, b.pos.X, b.pos.Y, b.vel.X, b.vel.Y);
-  }
-  printf("==============\n");
-}
-
 //Returns if x is close enough to an integer
 bool isInteger(double x){
   double epsilon = .0001;
@@ -436,21 +429,6 @@ state* allStates(state beginning) {
   return stateList;
 }
 
-//Whooo starts simulation
-int main() {
-  state cur;
-  cur = makeDefaultState();
-  printf("STARTING SIMULATION\n");
-  for(int i = 0; i < 10; ++i) {
-    cur = next(cur);
-    disp(cur);
-  }
-  /*state *stateList = allStates(cur);
-  *for(int i = 0; i < 10; ++i) {
-  * disp(stateList[i]);
-  }*/
-}
-
 //If a ball goes on a straight line path from ball a to ball b, will there be miscellaneous collisions?
 bool isCollision(state cur, ball a, ball b){
   for(int i = 0; i < cur.numballs; ++i){
@@ -466,34 +444,111 @@ bool isCollision(state cur, ball a, ball b){
 }
 
 //Hit ball a to hit ball b to go on a straight line path to ball c - return the unit vector at which we hit the first ball (radians)
-//If the such path intersects something else on the way, return vector(0,0)
-vector directShot(state cur, ball a, ball b, ball c){
+//If the such path intersects something else on the way, return -10
+double directShot(state cur, ball a, ball b, ball c){
   vector cRelB = c.pos - b.pos;
   ball ghostBall = ball(b.pos - 2 * BALL_RADIUS * cRelB / abs(cRelB), -1);
-  if(isCollision(cur, a, ghostBall) || isCollision(cur, b, c)){ return vector(0,0);}
+  if(isCollision(cur, a, ghostBall) || isCollision(cur, b, c)){ return -10;}
   vector path = ghostBall.pos - a.pos;
-  return (path / abs(path));
+  return atan2(path.Y, path.X);
 }
 
 //Same thing as above, just with a combo
-vector comboShot(state cur, ball a, ball b, ball c, ball d){
+double comboShot(state cur, ball a, ball b, ball c, ball d){
   vector dRelC = d.pos - c.pos;
   ball ghostBall = ball(c.pos - 2 * BALL_RADIUS * dRelC / abs(dRelC), -1);
-  if(isCollision(cur, c, d)) { return vector(0,0);}
+  if(isCollision(cur, c, d)) { return -10;}
   return directShot(cur, a, b, ghostBall);
 }
 
-//Gives the best possible unit vector to hit the cue ball (balls[0]) at
-//idArray is a list of the id's of balls that we can possibly sink in
-vector bestMoves(state cur, int* idArray){
+//Gives the best possible angle to hit the cue ball (balls[0]) at
+//idArray is a vector of the id's of balls that we can possibly sink in
+//-10 is the default "we have no good move"
+double getBestMove(state cur, std::vector<int> idArray){
+  double width = WIDTH, height = HEIGHT;
+  double cVar = CORNER_WALL_MISSING - 1.4 * BALL_RADIUS;
+  double sVar = SIDE_WALL_MISSING - 1.1 * BALL_RADIUS;
   ball cue = cur.balls[0];
-  vector bestMoves = vector(0,0);
-  double angleRanges = 0;
-  vector lowPockets[1] = {vector(0,0)};
-  for(int i = 1; i < cur.numballs; ++i){
-    ball newBall = cur.balls[i];
+  double bestMove = -10;
+  double bestRange = 0;
+  ball lowPockets[6] = {ball(vector(cVar, 0), -1), ball(vector(width / 2 - cVar, 0), -1), ball(vector(width - cVar, 0), -1), 
+    ball(vector(cVar, height), -1), ball(vector(width / 2, height), -1), ball(vector(width - cVar, height), -1)};
+  ball pockets[6] = {ball(vector(0, 0), -1), ball(vector(width / 2, -SIDE_RADIUS / 2), -1), ball(vector(width, 0), -1), 
+    ball(vector(0, height), -1), ball(vector(width / 2, height + SIDE_RADIUS / 2), -1), ball(vector(width, height), -1)};
+  ball highPockets[6] = {ball(vector(0, cVar), -1), ball(vector(width / 2 + cVar, 0), -1), ball(vector(width, cVar), -1), 
+    ball(vector(0, height - cVar), -1), ball(vector(width / 2 + cVar, height), -1), ball(vector(width, height - cVar), -1)};
+  for(int i = 0; i < idArray.size(); ++i){
     if(onTable(cur, i)){
-      
+      ball newBall = cur.balls[idArray[i]];
+      for(int j = 0; j < 6; ++j){ //Check direct shot
+        double ang1 = directShot(cur, cue, newBall, lowPockets[j]);
+        double ang2 = directShot(cur, cue, newBall, highPockets[j]);
+        if(ang1 != -10 && ang2 != -10){
+          double diff = ang1 - ang2;
+          if(diff < 0) {diff = -diff;}
+          if(diff > bestRange){
+            bestRange = diff;
+            bestMove = directShot(cur, cue, newBall, pockets[j]);
+          }
+        }
+        for(int k = 0; k < idArray.size(); ++k){  //Check comboes
+          if(i != k && onTable(cur, k)){
+            ball endBall = cur.balls[idArray[k]];
+            double ang1 = comboShot(cur, cue, newBall, endBall, lowPockets[j]);
+            double ang2 = comboShot(cur, cue, newBall, endBall, highPockets[j]);
+            if(ang1 != -10 && ang2 != -10){
+              double diff = abs(ang1 - ang2);
+              if(diff > bestRange){
+                bestRange = diff;
+                bestMove = comboShot(cur, cue, newBall, endBall, pockets[j]);
+              }
+            }
+          }
+        }
+      }
     }
   }
+  return bestMove;
+}
+
+//Displays stuff
+void disp(state cur) {
+  printf("TIME=%f\n", cur.time);
+  for(int i = 0; i < cur.numballs; ++i) {
+    ball &b = cur.balls[i];
+    printf("BALL(%d): p=(%.2lf, %.2lf) v=(%.2lf, %.4lf)\n", b.id, b.pos.X, b.pos.Y, b.vel.X, b.vel.Y);
+  }
+  printf("==============\n");
+}
+
+//Default state for our simulation
+state makeDefaultState() {
+  state s;
+  s.time = 0;
+  s.numballs = 4;
+  s.balls = (ball *)malloc(s.numballs*sizeof(ball));
+  for(int i = 0; i < s.numballs; ++i) {
+    s.balls[i] = ball(vector((rand() % 100) / 50., (rand() % 50) / 50.), i);
+    s.balls[i].vel = vector(rnd(), rnd());
+  }
+  return s;
+}
+
+//Whooo starts simulation
+int main() {
+  state cur;
+  cur = makeDefaultState();
+  printf("STARTING SIMULATION\n");
+  /*for(int i = 0; i < 10; ++i) {
+    cur = next(cur);
+    disp(cur);
+  }
+  state *stateList = allStates(cur);
+  for(int i = 0; i < 10; ++i) {
+    disp(stateList[i]);
+  }*/
+  disp(cur);
+  static const int arr[] = {1,2,3};
+  std::vector<int> v (arr, arr + sizeof(arr) / sizeof(arr[0]) );
+  printf("%.4lf \n", getBestMove(cur, v));
 }
