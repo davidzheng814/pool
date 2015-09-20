@@ -9,10 +9,11 @@
 #import "TableViewController.h"
 #import "TableView.h"
 #import "PhysicsEngine.h"
+#import "AppDelegate.h"
+#import "Scanner.h"
 
 @interface TableViewController ()
 
-//@property (weak, nonatomic) IBOutlet UIImageView *ringImageView;
 @property (nonatomic) UIImageView *ringImageView;
 @property (nonatomic) UIImageView *arrowImageView;
 
@@ -21,14 +22,22 @@
 @implementation TableViewController
 
 - (void)viewDidLoad {
-    // Setting up default ball and finger positions
-    NSMutableArray *defaultBallPositions = [NSMutableArray array];
-    for (int i = 0; i < 16; i++) {
-        CGPoint point = CGPointMake(50 + i * 26, 50 + i * 10);
-        NSValue *value = [NSValue valueWithCGPoint:point];
-        [defaultBallPositions addObject:value];
-    }
-    self.ballPositions = defaultBallPositions; // Remember to pull points out with [array[i] CGPointValue]
+    // Setting up ball and finger positions
+    
+    // Create test/default ball positions
+//    NSMutableArray *defaultBallPositions = [NSMutableArray array];
+//    for (int i = 0; i < 16; i++) {
+//        CGPoint point = CGPointMake(50 + i * 26, 50 + i * 10);
+//        NSValue *value = [NSValue valueWithCGPoint:point];
+//        [defaultBallPositions addObject:value];
+//    }
+//    self.ballPositions = defaultBallPositions; // Remember to pull points out with [array[i] CGPointValue]
+    
+    // Send uploaded image to scanner
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    UIImage *uploadedImage = appDelegate.uploadedImage;
+    self.ballPositions = [Scanner find_table:uploadedImage];
+    
     self.fingerPosition = CGPointMake(-1, -1);
     [self.tableView setUp];
     [self rerenderTableImage];
@@ -54,6 +63,14 @@
     doubleTap.numberOfTapsRequired = 2;
     [self.view addGestureRecognizer:doubleTap];
     [singleTap requireGestureRecognizerToFail:doubleTap];
+    
+    // Testing for coordinate values
+//    UIImage *testImage = [UIImage imageNamed:@"dot.png"];
+//    CGRect cropRect = CGRectMake(0.0, 0.0, 20.0, 20.0);
+//    UIImageView *testImageView = [[UIImageView alloc] initWithFrame:cropRect];
+//    testImageView.image = testImage;
+//    testImageView.center = CGPointMake(100, 317);
+//    [self.view addSubview:testImageView];
 }
 
 - (void)rerenderTableImage { // Only cares about balls

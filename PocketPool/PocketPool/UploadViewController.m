@@ -7,6 +7,8 @@
 //
 
 #import "UploadViewController.h"
+#import "Scanner.h"
+#import "AppDelegate.h"
 
 @interface UploadViewController ()
 
@@ -89,8 +91,14 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         self.uploadedImage = nil;
         self.uploadedImageView.image = nil;
     } else { // OK clicked
+        [self saveImageInDelegate];
         [self performSegueWithIdentifier: @"UploadToTableSegue" sender:self];
     }
+}
+
+- (void)saveImageInDelegate {
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    appDelegate.uploadedImage = self.uploadedImage;
 }
 
 @end

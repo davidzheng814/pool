@@ -16,5 +16,6 @@
 - (void)animateImageWithBallFrames:(NSArray *)ballFrames // array of ballPosition arrays
                          withIndex:(int)index
                       withMaxIndex:(int)max;
++ (CGPoint)convertPointToDisplayPoint:(CGPoint)point;
 
 @end

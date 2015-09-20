@@ -39,13 +39,15 @@
 - (void)renderImageWithBallPositions:(NSArray *)ballPositions {
 //    NSLog(@"TableView renderImage called");
     for (int i = 0; i < [ballPositions count]; i++) {
-//        NSLog(@"Drawing ball %d", i);
+        NSLog(@"Drawing ball %d", i);
         NSValue *positionVal = ballPositions[i];
         CGPoint position = [positionVal CGPointValue];
+        CGPoint displayPosition = [TableView convertPointToDisplayPoint:position];
         UIImageView *ballImage = self.ballViewArray[i];
-        if (position.x > 0 && position.y > 0) {
+        if (position.x != 1000000) {
             ballImage.hidden = NO;
-            ballImage.center = position;
+            ballImage.center = displayPosition;
+            NSLog(@"Original position (%f, %f) and display position (%f, %f).", i, position.x, position.y, displayPosition.x, displayPosition.y);
         } else {
             ballImage.hidden = YES;
         }
@@ -58,10 +60,11 @@
                          for (int i = 0; i < [ballPositions count]; i++) {
                              NSValue *positionVal = ballPositions[i];
                              CGPoint position = [positionVal CGPointValue];
+                             CGPoint displayPosition = [TableView convertPointToDisplayPoint:position];
                              UIImageView *ballImage = self.ballViewArray[i];
-                             if (position.x > 0 && position.y > 0) {
+                             if (position.x != 1000000) {
                                  ballImage.hidden = NO;
-                                 ballImage.center = position;
+                                 ballImage.center = displayPosition;
                              } else {
                                  ballImage.hidden = YES;
                              }
@@ -101,6 +104,12 @@
                              [self animateImageWithBallFrames:ballFrames withIndex:newIndex withMaxIndex:max];
                          }
                      }];
+}
+
++ (CGPoint)convertPointToDisplayPoint:(CGPoint)point {
+    float x = point.x * 173.333 + 55;
+    float y = point.y * 173.333 + 57;
+    return CGPointMake(x, y);
 }
 
 @end

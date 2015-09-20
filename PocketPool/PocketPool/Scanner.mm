@@ -110,7 +110,7 @@ void push(int i, int j, int cur) {
 void bfs(int i, int j, int cur) {
     ql = qr = 0;
     push(i, j, cur);
-
+    
     while (ql < qr) {
         i = qi[ql];
         j = qj[ql];
@@ -206,7 +206,7 @@ int getBalls(cv::Mat &img, Point2f *points) {
     }
     Mat mask = img2;
     [UIImagePNGRepresentation(MatToUIImage(mask)) writeToFile:@"/Users/stevenhao/Desktop/tmpoutput/mask.png" atomically:YES];
-
+    
     printf("dims: %d %d\n", mask.rows, mask.cols);
     
     cv::Mat blur_mask(img.rows, img.cols, CV_8UC1);
@@ -245,7 +245,7 @@ int getBalls(cv::Mat &img, Point2f *points) {
     }
     [UIImagePNGRepresentation(MatToUIImage(blur_mask)) writeToFile:@"/Users/stevenhao/Desktop/tmpoutput/blurmask.png" atomically:YES];
     [UIImagePNGRepresentation(MatToUIImage(blur_mask2)) writeToFile:@"/Users/stevenhao/Desktop/tmpoutput/blurmask2.png" atomically:YES];
-
+    
     dfs_mask = mask;
     std::vector<int> counter;
     std::vector<int> x;
@@ -259,7 +259,7 @@ int getBalls(cv::Mat &img, Point2f *points) {
                 sumx[num_blobs] = 0;
                 sumy[num_blobs] = 0;
                 cnt[num_blobs] = 0;
-//                imgs[num_blobs] = Mat(mask);
+                //                imgs[num_blobs] = Mat(mask);
                 bfs(i, j, num_blobs);
             }
         }
@@ -286,11 +286,11 @@ int getBalls(cv::Mat &img, Point2f *points) {
         vector<pii> region;
         for(int x = 0; x < tmp.rows; ++x) {
             for(int y = 0; y < tmp.cols; ++y) {
-//                tmp.at<UInt8>(x, y) = 255;
+                //                tmp.at<UInt8>(x, y) = 255;
                 if (assn[x][y] == i + 1) {
                     region.push_back(pii(x, y));
                     tmp.at<UInt8>(x, y) = 255;
-//                    printf("found point (%d, %d) ", x, y);
+                    //                    printf("found point (%d, %d) ", x, y);
                 } else {
                     tmp.at<UInt8>(x, y) = 0;
                 }
@@ -300,42 +300,42 @@ int getBalls(cv::Mat &img, Point2f *points) {
         NSString *filenames[] = {@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"10", @"11", @"12", @"13"};
         if (j < 13)
             [UIImagePNGRepresentation(MatToUIImage(tmp)) writeToFile:[[@"/Users/stevenhao/Desktop/tmpoutput/image" stringByAppendingString: filenames[j]] stringByAppendingString: @".png" ] atomically:YES];
-
+        
         
         
         float x = sumx[i + 1], y = sumy[i + 1];
-
+        
         printf("about to make, j=%d, x,y,c = %lf %lf %lf\n", j, x, y, c);
         Point2f p = Point2f(x / c, y / c);
         points[j] = p;
         ++j;
-//        printf("done with make\n");
+        //        printf("done with make\n");
     }
     return j;
 }
 
 const int MAXN = 100100;
 /*
-def distance(line, point):
-rho, theta = line
-if theta==0:
-x1, y1 = (rho, 0)
-x2, y2 = (rho, 10)
-else:
-x1, y1 = (rho*np.cos(theta),rho*np.sin(theta))
-x2, y2 = (0, rho/np.sin(theta))
-x0, y0 = point
-return math.fabs((y2 - y1)*x0 - (x2 - x1)*y0 + x2*y1 - y2*x1)/math.sqrt((y2-y1)*(y2-y1) + (x2-x1)*(x2-x1))
-
-def line_dist(line1, line2):
-max_rho_dist = 80
-max_th_dist = 5*math.pi/180.
-rho1, th1 = line1
-rho2, th2 = line2
-
-if math.fabs(rho1-rho2) < max_rho_dist and math.fabs(th1 - th2) < max_th_dist:
-return True
-return False
+ def distance(line, point):
+ rho, theta = line
+ if theta==0:
+ x1, y1 = (rho, 0)
+ x2, y2 = (rho, 10)
+ else:
+ x1, y1 = (rho*np.cos(theta),rho*np.sin(theta))
+ x2, y2 = (0, rho/np.sin(theta))
+ x0, y0 = point
+ return math.fabs((y2 - y1)*x0 - (x2 - x1)*y0 + x2*y1 - y2*x1)/math.sqrt((y2-y1)*(y2-y1) + (x2-x1)*(x2-x1))
+ 
+ def line_dist(line1, line2):
+ max_rho_dist = 80
+ max_th_dist = 5*math.pi/180.
+ rho1, th1 = line1
+ rho2, th2 = line2
+ 
+ if math.fabs(rho1-rho2) < max_rho_dist and math.fabs(th1 - th2) < max_th_dist:
+ return True
+ return False
  */
 
 double distance(Vec2d line, double x0, double y0) {
@@ -354,7 +354,7 @@ double distance(Vec2d line, double x0, double y0) {
 double touching(Vec2d line1, Vec2d line2) {
     double max_rho_dist = 80;
     double max_th_dist = 5*PI/180.;
-//    return false;
+    //    return false;
     return fabs(line1[0]-line2[0]) < max_rho_dist && fabs(line1[1] - line2[1]) < max_th_dist;
     
 }
@@ -401,7 +401,7 @@ Point2f mult(Mat m, Point2f p) {
     original_img = img;
  
     [UIImagePNGRepresentation(MatToUIImage(img)) writeToFile: @"/Users/stevenhao/Desktop/tmpoutput/source.png" atomically:YES];
-
+    
     double scale_to_width = 2000;
     
     cv::resize(img, img, cv::Size(), scale_to_width/img.cols, scale_to_width/img.cols);
@@ -409,7 +409,7 @@ Point2f mult(Mat m, Point2f p) {
     const int width = img.cols;
     const int height = img.rows;
     
-//    Mat tbl_color = (Mat_<float>(3, 1) << 153., 131., 102.);
+    //    Mat tbl_color = (Mat_<float>(3, 1) << 153., 131., 102.);
     cv::Mat img2(img.rows, img.cols, CV_8UC1);
     img2.at<char>(0,0) = 255;
     const int thres = 75;
@@ -422,7 +422,7 @@ Point2f mult(Mat m, Point2f p) {
                 printf("%u\n", val);
                 printf("%u %u %u\n", val & 255, (val >> 8) & 255, (val >> 16) & 255);
             }
-//            printf("Pixel: %d",val);
+            //            printf("Pixel: %d",val);
             int dist = 0;
             for(int k = 0; k < 3; ++k) {
                 int dx = (val >> (8 * k)) & 255;
@@ -438,24 +438,24 @@ Point2f mult(Mat m, Point2f p) {
         }
     }
     [UIImagePNGRepresentation(MatToUIImage(img2)) writeToFile:@"/Users/stevenhao/Desktop/img2output.png" atomically:YES];
-
+    
     printf("sum = %lf, osum = %lf\n", sum, osum);
     /*
      tbl_color = np.asarray([153, 131, 102])
      threshold = 75
      color_dist = np.sum((img - tbl_color)**2, axis=2)
      tbl_mask = 255*(color_dist < threshold**2)
-    */
+     */
     
     Canny( img2, img, 50, 200, 3 );
-
-//    cv::Canny(img, img, 50, 200, 3);
-//    cv::cvtColor( img, img2, CV_GRAY2BGR );
-
+    
+    //    cv::Canny(img, img, 50, 200, 3);
+    //    cv::cvtColor( img, img2, CV_GRAY2BGR );
+    
     std::vector<cv::Vec2f> lines;
     
     printf("Starting hough lines.\n");
-//    HoughLinesP( img, _lines, 1, CV_PI/180, 80, 30, 10 );
+    //    HoughLinesP( img, _lines, 1, CV_PI/180, 80, 30, 10 );
     cv::HoughLines(img, lines, 0.5, CV_PI/180, 100);
     
     printf("Ending hough lines.\n");
@@ -537,8 +537,7 @@ Point2f mult(Mat m, Point2f p) {
     
     // Define the destination image
     double W = 1.25;
-    double H = 2.5;
-//    cv::Mat quad = cv::Mat::zeros(width, height, CV_8UC3);
+    double H = 2.50;
     
     
     // Corners of the destination image
@@ -548,19 +547,32 @@ Point2f mult(Mat m, Point2f p) {
     quad_pts.push_back(cv::Point2f(H, W));
     quad_pts.push_back(cv::Point2f(0, W));
     printf("Ending push back.\n");
-
-    // Get transformation matrix
-    cv::Mat transmtx = cv::getPerspectiveTransform(corners, quad_pts);
+    
     
     // Apply perspective transformation
-//    cv::warpPerspective(img3, quad, transmtx, quad.size());
+    
+    
+    cv::Mat quad = cv::Mat::zeros(width, height, CV_8UC3);
+    cv::Mat transmtx = cv::getPerspectiveTransform(corners, quad_pts);
+    cv::warpPerspective(img3, quad, transmtx, quad.size());
+    [UIImagePNGRepresentation(MatToUIImage(quad)) writeToFile:@"/Users/stevenhao/Desktop/output.png" atomically:YES];
+    
     cv::Point2f points[16];
     int num_balls = getBalls(img3, points);
-
+    
     printf("FOUND %d balls\n", num_balls);
-    std::cout << "CORNERS: " << approx << std::endl;
+    
+    
+    // Get transformation matrix
+    std::cout << "CORNERS: " << corners << std::endl;
     std::cout << "QUAD: " << quad_pts << std::endl;
     std::cout << "TRANSMTX: " << transmtx << std::endl;
+    for(int i = 0; i < 4; ++i) {
+        Point2f p = corners[i];
+        printf("CORNER(%d) at %lf %lf\n", i, p.x, p.y);
+        Point2f pt = mult(transmtx, p);
+        printf("CORNERT(%d) at %lf %lf\n", i, pt.x, pt.y);
+    }
     NSMutableArray *ret = [NSMutableArray arrayWithCapacity: 16];
     for (int i = 0; i < 16; ++i) {
         [ret addObject: [NSValue valueWithCGPoint: CGPointMake(1E6, 1)]];
@@ -577,7 +589,6 @@ Point2f mult(Mat m, Point2f p) {
         [ret setObject: [NSValue valueWithCGPoint: CGPointMake(transform.x, transform.y)] atIndexedSubscript:ballcolor];
     }
     return ret;
-//    [UIImagePNGRepresentation(MatToUIImage(quad)) writeToFile:@"/Users/stevenhao/Desktop/output.png" atomically:YES];
     printf("FINISH.\n");
 }
 

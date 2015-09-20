@@ -567,11 +567,11 @@ state makeDefaultState() {
         double x = point.x;
         double y = point.y;
         ball new_ball;
-        new_ball.pos = {x, y};
+        new_ball.pos = vector(x, y);
         if (ind == 0)
-            new_ball.vel = {scale*(fingerPosition.x - x), scale*(fingerPosition.y - y)};
+            new_ball.vel = vector(scale*(fingerPosition.x - x), scale*(fingerPosition.y - y));
         else
-            new_ball.vel = {0, 0};
+            new_ball.vel = vector(0, 0);
         balls_arr[ind] = new_ball;
         ++ind;
     }
