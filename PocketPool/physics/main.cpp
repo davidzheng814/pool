@@ -30,15 +30,15 @@ typedef std::complex<double> vector;
 #define X real()
 #define Y imag()
 
-const double CORNER_WITHIN_WALL = .045; //perp distance between center of pocket and the rail
-const double CORNER_WALL_MISSING = .09; //amount of wall that's missing in each direction around the corner
-const double CORNER_SLOPE = 1.4; //slope of the top left corner wall
-const double CORNER_RADIUS = .076;
+const double CORNER_WITHIN_WALL = .024; //perp distance between center of pocket and the rail
+const double CORNER_WALL_MISSING = .106; //amount of wall that's missing in each direction around the corner
+const double CORNER_SLOPE = 1; //slope of the top left corner wall
+const double CORNER_RADIUS = .096;
 
-const double SIDE_WALL_MISSING = .076; //amount of wall missing on either side around the side
-const double SIDE_WITHIN_WALL = .063;
-const double SIDE_SLOPE = 3;
-const double SIDE_RADIUS = .063;
+const double SIDE_WALL_MISSING = .096; //amount of wall missing on either side around the side
+const double SIDE_WITHIN_WALL = .11;
+const double SIDE_SLOPE = 5;
+const double SIDE_RADIUS = .096;
 
 const double BALL_RADIUS = .0285;
 const double WIDTH = 2.5;
@@ -575,8 +575,6 @@ vector getGhostImage(state cur, double angle){
       dt = t; 
       printf("pocketwall: %.2lf %d \n", dt, j);}
   }
-  
-  printf("%.2lf \n", dt);
   copyCue.run(dt);
   return copyCue.pos;
 }
@@ -617,8 +615,7 @@ int main() {
   for(int i = 0; i < 10; ++i) {
     disp(stateList[i]);
   }*/
-  disp(cur);
+  //disp(cur);
   static const int arr[] = {1,2,3};
   std::vector<int> v (arr, arr + sizeof(arr) / sizeof(arr[0]) );
-  vector ghost = getGhostImage(cur, 0);
 }
