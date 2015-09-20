@@ -11,7 +11,7 @@
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>B2594B83EF297080D79833020A16AE54AC481FFB</key>
-		<string>https://github.com/davidzheng814/Pool.git</string>
+		<string>https://github.com/davidzheng814/pool.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>PocketPool/PocketPool.xcodeproj</string>
@@ -21,7 +21,7 @@
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/davidzheng814/Pool.git</string>
+	<string>https://github.com/davidzheng814/pool.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
@@ -34,7 +34,7 @@
 			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>B2594B83EF297080D79833020A16AE54AC481FFB</string>
 			<key>IDESourceControlWCCName</key>
-			<string>davidzheng814:pool</string>
+			<string>pool</string>
 		</dict>
 	</array>
 </dict>

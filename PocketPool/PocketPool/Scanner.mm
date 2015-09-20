@@ -155,7 +155,7 @@ int getColor(Point2f point) {
         colors[i] = (colors[0] + colors[i - 7])/2;
     }
     int group = assn[ic][jc];
-    int ans = -1;
+    int ans = 0;
     double bst = 999999999;
     for(int i = 0; i < 16; ++i) {
         double dst = scoreColor(group, colors[i]);
@@ -561,9 +561,7 @@ Point2f mult(Mat m, Point2f p) {
     int num_balls = getBalls(img3, points);
     
     printf("FOUND %d balls\n", num_balls);
-    
-    
-    // Get transformation matrix
+
     std::cout << "CORNERS: " << corners << std::endl;
     std::cout << "QUAD: " << quad_pts << std::endl;
     std::cout << "TRANSMTX: " << transmtx << std::endl;
@@ -577,11 +575,17 @@ Point2f mult(Mat m, Point2f p) {
     for (int i = 0; i < 16; ++i) {
         [ret addObject: [NSValue valueWithCGPoint: CGPointMake(1E6, 1)]];
     }
+    for(int i = 0; i < 4; ++i) {
+        printf("CORNERS %lf %lf\n", corners[i].x, corners[i].y);
+        Point2f ct = mult(transmtx, corners[i]);
+        printf("CT %lf %lf\n", ct.x, ct.y);
+    }
     int j = 0;
     for(int i = 0; i < num_balls && i < 16; ++i) {
         Point2f p = points[i];
         printf("BALL(%d) at %lf, %lf\n", i, points[i].x, points[i].y);
         Point2f transform = mult(transmtx, p);
+        transform = Point2f(transform.x, transform.y);
         printf("(transformed at %lf, %lf\n", transform.x, transform.y);
         if (transform.x < 0 || transform.x > W || transform.y < 0 || transform.y > H) continue;
         int ballcolor = getColor(p);

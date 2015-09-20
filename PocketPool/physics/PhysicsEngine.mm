@@ -429,7 +429,6 @@ state* allStates(state beginning, int &numFrames) {
         
         cur = next(cur);
     }
-//    free(cur.balls);
     return stateList;
 }
 
