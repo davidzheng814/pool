@@ -341,7 +341,7 @@ Point2f mult(Mat m, Point2f p) {
     return ans;
 }
 
-+ (NSArray*) find_table:(UIImage *)image withBalls:(NSArray *)balls{
++ (NSArray*) find_table:(UIImage *)image{
     cv::Mat img;
     UIImageToMat(image, img);
  
