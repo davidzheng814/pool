@@ -12,20 +12,17 @@
 
 - (void)setUp {
     // Render background image
+//    NSLog(@"TableView setUp");
     UIImage *backgroundImage = [UIImage imageNamed:@"table.png"];
     UIImageView *backgroundView = [[UIImageView alloc] initWithImage:backgroundImage];
     [self addSubview:backgroundView];
     [self sendSubviewToBack:backgroundView];
 }
 
-- (void)renderImageWithFingerPosition:(CGPoint)fingerPosition
-                    withBallPositions:(NSArray *)ballPositions {
-    NSLog(@"TableView renderImage called");
-    if (fingerPosition.x > 0 && fingerPosition.y > 0) {
-        [self drawArrow];
-    }
+- (void)renderImageWithBallPositions:(NSArray *)ballPositions {
+//    NSLog(@"TableView renderImage called");
     for (int i = 0; i < [ballPositions count]; i++) {
-        NSLog(@"Drawing ball %d", i);
+//        NSLog(@"Drawing ball %d", i);
         NSValue *positionVal = ballPositions[i];
         CGPoint position = [positionVal CGPointValue];
         if (position.x > 0 && position.y > 0) {
@@ -35,10 +32,6 @@
             [self addSubview:ballImage];
         }
     }
-}
-
-- (void)drawArrow {
-    // TODO
 }
 
 @end

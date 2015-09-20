@@ -128,9 +128,17 @@
                             </imageView>
                             <view contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="gMJ-2g-AdD" customClass="TableView">
                                 <rect key="frame" x="16" y="16" width="568" height="568"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" image="ring" translatesAutoresizingMaskIntoConstraints="NO" id="dlo-x5-aLm">
+                                        <rect key="frame" x="274" y="274" width="20" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="20" id="7JK-ij-1gj"/>
+                                            <constraint firstAttribute="height" constant="20" id="Tik-Sz-YM4"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
                                 <gestureRecognizers/>
                                 <connections>
-                                    <outletCollection property="gestureRecognizers" destination="YeT-ly-B7O" appends="YES" id="GFJ-9S-Y8S"/>
                                     <outletCollection property="gestureRecognizers" destination="dnr-Qu-1tG" appends="YES" id="CLI-JI-FDG"/>
                                 </connections>
                             </view>
@@ -138,27 +146,21 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Caa-r8-YxP" firstAttribute="top" secondItem="dQM-Kn-p6Y" secondAttribute="topMargin" id="73l-0M-iUO"/>
-                            <constraint firstItem="FGf-9u-T3Z" firstAttribute="top" secondItem="gMJ-2g-AdD" secondAttribute="bottom" constant="16" id="8kD-Iu-6LM"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="gMJ-2g-AdD" secondAttribute="trailing" id="AKq-UY-RjF"/>
-                            <constraint firstAttribute="centerY" secondItem="gMJ-2g-AdD" secondAttribute="centerY" id="BQx-lP-tpo"/>
-                            <constraint firstAttribute="centerX" secondItem="gMJ-2g-AdD" secondAttribute="centerX" id="MAI-cx-KdE"/>
+                            <constraint firstItem="gMJ-2g-AdD" firstAttribute="leading" secondItem="dQM-Kn-p6Y" secondAttribute="leadingMargin" id="DQB-73-jxf"/>
+                            <constraint firstItem="gMJ-2g-AdD" firstAttribute="centerY" secondItem="Caa-r8-YxP" secondAttribute="centerY" id="JRj-Zf-MzR"/>
                             <constraint firstItem="Caa-r8-YxP" firstAttribute="leading" secondItem="dQM-Kn-p6Y" secondAttribute="leadingMargin" constant="-16" id="Sxt-GN-T0g"/>
                             <constraint firstItem="FGf-9u-T3Z" firstAttribute="top" secondItem="Caa-r8-YxP" secondAttribute="bottom" id="V2Q-Wa-cL2"/>
-                            <constraint firstItem="gMJ-2g-AdD" firstAttribute="leading" secondItem="dQM-Kn-p6Y" secondAttribute="leadingMargin" id="dYK-Lt-hdZ"/>
+                            <constraint firstItem="gMJ-2g-AdD" firstAttribute="centerX" secondItem="Caa-r8-YxP" secondAttribute="centerX" id="ZmM-FW-NIN"/>
+                            <constraint firstItem="FGf-9u-T3Z" firstAttribute="top" secondItem="gMJ-2g-AdD" secondAttribute="bottom" constant="16" id="dzh-qa-aL2"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Caa-r8-YxP" secondAttribute="trailing" constant="-16" id="kqA-Tr-fh6"/>
-                            <constraint firstItem="gMJ-2g-AdD" firstAttribute="top" secondItem="dQM-Kn-p6Y" secondAttribute="topMargin" constant="16" id="sdk-IN-RLR"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="ringImageView" destination="dlo-x5-aLm" id="kzq-de-LaB"/>
                         <outlet property="tableView" destination="gMJ-2g-AdD" id="oUs-Xe-87L"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YuN-DU-MbN" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="YeT-ly-B7O">
-                    <connections>
-                        <action selector="handleTap:" destination="UGi-eX-bJS" id="6z8-NJ-JpG"/>
-                    </connections>
-                </tapGestureRecognizer>
                 <panGestureRecognizer minimumNumberOfTouches="1" id="dnr-Qu-1tG">
                     <connections>
                         <action selector="handlePan:" destination="UGi-eX-bJS" id="fyV-Ib-RtH"/>
@@ -170,5 +172,6 @@
     </scenes>
     <resources>
         <image name="background" width="300" height="300"/>
+        <image name="ring" width="512" height="512"/>
     </resources>
 </document>

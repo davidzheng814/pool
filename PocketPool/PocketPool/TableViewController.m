@@ -9,25 +9,55 @@
 #import "TableViewController.h"
 #import "TableView.h"
 
+@interface TableViewController ()
+
+//@property (weak, nonatomic) IBOutlet UIImageView *ringImageView;
+@property (nonatomic) UIImageView *ringImageView;
+@property (nonatomic) UIImageView *arrowImageView;
+
+@end
+
 @implementation TableViewController
 
 - (void)viewDidLoad {
     // Setting up default ball and finger positions
-    self.ballPositions = @[[NSValue valueWithCGPoint:CGPointMake(10, 10)],
-                           [NSValue valueWithCGPoint:CGPointMake(20, 20)],
-                           [NSValue valueWithCGPoint:CGPointMake(30, 30)],
-                           [NSValue valueWithCGPoint:CGPointMake(40, 40)],
-                           [NSValue valueWithCGPoint:CGPointMake(50, 50)]
-                           ]; // Remember to pull points out with [array[i] CGPointValue]
+    NSMutableArray *defaultBallPositions = [NSMutableArray array];
+    for (int i = 0; i < 16; i++) {
+        CGPoint point = CGPointMake(50 + i * 26, 50 + i * 10);
+        NSValue *value = [NSValue valueWithCGPoint:point];
+        [defaultBallPositions addObject:value];
+    }
+    self.ballPositions = defaultBallPositions; // Remember to pull points out with [array[i] CGPointValue]
     self.fingerPosition = CGPointMake(-1, -1);
     [self.tableView setUp];
-    [self rerenderImage];
+    [self rerenderTableImage];
+    
+    // Set up ring and arrow images
+    UIImage *ringImage = [UIImage imageNamed:@"ring.png"];
+    self.ringImageView.image = ringImage;
+    self.ringImageView.translatesAutoresizingMaskIntoConstraints = YES;
+    [self.tableView addSubview:self.ringImageView];
+//    [self.tableView bringSubviewToFront:self.ringImageView];
+    self.ringImageView.hidden = YES;
+    //    UIImage *arrowImage = [UIImage imageNamed:@"arrow.png"];
+    //    self.arrowImageView.image = arrowImage;
+    //    [self addSubview:self.arrowImageView];
+    
+    // Setting up gesture recognizer
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                action:@selector(doSingleTap:)];
+    singleTap.numberOfTapsRequired = 1;
+    [self.view addGestureRecognizer:singleTap];
+    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                action:@selector(doDoubleTap:)];
+    doubleTap.numberOfTapsRequired = 2;
+    [self.view addGestureRecognizer:doubleTap];
+    [singleTap requireGestureRecognizerToFail:doubleTap];
 }
 
-- (void)rerenderImage {
-    NSLog(@"TableViewController rerender image. BallPositions count: %lu", (unsigned long)[self.ballPositions count]);
-    [self.tableView renderImageWithFingerPosition:self.fingerPosition
-                                withBallPositions:self.ballPositions];
+- (void)rerenderTableImage { // Only cares about balls
+//    NSLog(@"TableViewController rerender image. BallPositions count: %lu", (unsigned long)[self.ballPositions count]);
+    [self.tableView renderImageWithBallPositions:self.ballPositions];
 }
 
 // MARK: Orientation lock
@@ -43,19 +73,32 @@
 
 // MARK: Handle gestures
 
-- (IBAction)handleTap:(UITapGestureRecognizer *)recognizer {
-    if (recognizer.state == UIGestureRecognizerStateEnded) {
-        self.fingerPosition = [recognizer locationInView:self.tableView];
-    }
-    // Double tap = erase finger
+- (void)doSingleTap:(UITapGestureRecognizer *)recognizer { // Places finger there
+    [self rerenderTableImage];
+    self.fingerPosition = [recognizer locationInView:self.tableView];
+    self.ringImageView.center = self.fingerPosition;
+//    NSLog(@"single tap at %f, %f", self.fingerPosition.x, self.fingerPosition.y);
+    self.ringImageView.hidden = NO;
+    [self.tableView bringSubviewToFront:self.ringImageView];
+}
+
+- (void)doDoubleTap:(UITapGestureRecognizer *)recognizer { // Cancel tap
+    self.fingerPosition = CGPointMake(-1, -1);
+    self.ringImageView.hidden = YES;
+    [self rerenderTableImage];
 }
 
 - (IBAction)handlePan:(UIPanGestureRecognizer *)recognizer {
-    
-    CGPoint translation = [recognizer translationInView:self.tableView];
-    recognizer.view.center = CGPointMake(recognizer.view.center.x + translation.x,
-                                         recognizer.view.center.y + translation.y);
-    [recognizer setTranslation:CGPointMake(0, 0) inView:self.tableView];
+    self.fingerPosition = [recognizer locationInView:self.tableView];
+    if (hypot((self.ringImageView.center.x - self.fingerPosition.x), (self.ringImageView.center.y - self.fingerPosition.y)) < 50) {
+        CGPoint translation = [recognizer translationInView:self.tableView];
+        self.fingerPosition = CGPointMake(self.fingerPosition.x + translation.x, self.fingerPosition.y + translation.y);
+        [recognizer setTranslation:CGPointMake(0, 0) inView:self.tableView];
+    }
+    self.ringImageView.center = self.fingerPosition;
+    [self rerenderTableImage];
+    self.ringImageView.hidden = NO;
+    [self.tableView bringSubviewToFront:self.ringImageView];
 }
 
 @end

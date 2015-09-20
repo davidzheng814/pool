@@ -11,7 +11,6 @@
 @interface TableView : UIView
 
 - (void)setUp;
-- (void)renderImageWithFingerPosition:(CGPoint)fingerPosition
-                    withBallPositions:(NSArray *)ballPositions;
+- (void)renderImageWithBallPositions:(NSArray *)ballPositions;
 
 @end

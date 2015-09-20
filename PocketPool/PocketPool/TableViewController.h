@@ -16,6 +16,6 @@
 @property (nonatomic) CGPoint fingerPosition;
 @property (weak, nonatomic) IBOutlet TableView *tableView;
 
-- (void)rerenderImage;
+- (void)rerenderTableImage;
 
 @end
