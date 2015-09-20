@@ -8,6 +8,11 @@ typedef std::complex<double> vector;
 #define X real()
 #define Y imag()
 
+const double CORNER_WITHIN_WALL = .03; //perp distance between center of pocket and the rail
+const double SIDE_WITHIN_WALL = .05;
+const double CORNER_WALL_MISSING = .03; //amount of wall that's missing in each direction around the corner
+const double SIDE_WALL_MISSING = .05; //amount of wall missing on either side around the side
+
 const double BALL_RADIUS = .029;
 const double POCKET_RADIUS = .05;
 const double WIDTH = 3;
@@ -16,6 +21,7 @@ const double FRICTION = 0.1;
 const double RAIL_RES = 0.75;
 const double BALL_RES = 0.95;
 
+//Structure that holds a ball object
 struct ball {
   vector pos;
   vector vel;
@@ -42,20 +48,25 @@ struct ball {
   }
 };
 
+//Snapshot of the state of the table
 struct state {
   double time;
   int numballs;
   ball *balls;
 };
 
+//Take the dot product of two vectors
 double dot(vector a, vector b) {
   return a.X * b.X + a.Y * b.Y;
 }
 
+//Lulz take the square of a number
 inline double square(double x) {
   return x * x;
 }
 
+//Uses law of cosines to calculate when ball a travels within (BALL_RADIUS+radius2) of ball b
+//Used within collideBalls and collidePocket
 double collideHelper(ball a, ball b, double dt, double radius2) {
   double r = BALL_RADIUS;
 
@@ -71,10 +82,24 @@ double collideHelper(ball a, ball b, double dt, double radius2) {
   else return ans;
 }
 
+//Returns at what time the two balls collide
 double collideBalls(ball a, ball b, double dt) {
   return collideHelper(a, b, dt, BALL_RADIUS);
 }
 
+//Determines whether, given some x coordinate, there will be a wall at y=0 or y=height
+bool isValidWallWidth(double x){
+    double corner = CORNER_WALL_MISSING, side = SIDE_WALL_MISSING, width = WIDTH;
+    return ( (corner < x && x < width / 2 - side) || (width / 2 + side < x && x < width - corner) );
+}
+
+//Determines whether, given some y coordinate, there will be a wall at x=0 or x=width
+bool isValidWallHeight(double y){
+    double corner = CORNER_WALL_MISSING, side = SIDE_WALL_MISSING, height = HEIGHT;
+    return ( (corner < y && y < height / 2 - side) || (height / 2 + side < y && y < height - corner) );
+}
+
+//Returns at what time the ball collides with the wall
 double collideWall(ball cur, int wallId, double dt) {
   double x = cur.pos.X, y = cur.pos.Y;
   double vx = cur.vel.X, vy = cur.vel.Y;
@@ -84,48 +109,66 @@ double collideWall(ball cur, int wallId, double dt) {
 
   if (wallId == 0) { // (width, 0) -- (0, 0)
     if (ny < r) {
-      return (r - y) / vy;
+      double t = (r - y) / vy;
+      double xAtT = x + vx * t;
+      if(isValidWallWidth(xAtT)) { return t;}
     }
   } else if (wallId == 1) { // (width, height) -- (width, 0)
     if (nx > width - r) {
-      return (width - r - x) / vx;
+      double t = (width - r - x) / vx;
+      double yAtT = y + vy * t;
+      if( isValidWallHeight(yAtT)) { return t;}
     }
   } else if (wallId == 2) { // (0, height) -- (width, height)
     if (ny  > height - r) {
-      return (height - r - y) / vy;
+      double t = (height - r - y) / vy;
+      double xAtT = x + vx * t;
+      if(isValidWallWidth(xAtT)) { return t;}
     }
   } else if (wallId == 3) { // (0, 0) -- (0, height)
     if (nx < r) {
-      return (r - x) / vx;
+      double t = (r - x) / vx;
+      double yAtT = y + vy * t;
+      if( isValidWallHeight(yAtT)) { return t;}
     }
   }
   return -1;
 }
 
+//Returns at what time the ball colliddes with the pocket (ie gets sunk)
 double collidePocket(ball cur, int pockID, double dt) {
-  double width = WIDTH, height = HEIGHT;
+  double width = WIDTH, height = HEIGHT, corner = CORNER_WITHIN_WALL, side = SIDE_WITHIN_WALL;
   double x = 0,y = 0;
   if(pockID == 0){
-    x = 0, y = 0;
+    x = -corner, y = -corner;
   } else if (pockID == 1){
-    x = width / 2, y = 0;
+    x = width / 2, y = -side;
   } else if (pockID == 2){
-    x = width, y = 0;
+    x = width + corner, y = -corner;
   } else if (pockID == 3){
-    x = 0, y = height;
+    x = -corner, y = height + corner;
   } else if (pockID == 4){
-    x = width / 2, y = height;
+    x = width / 2, y = height + side;
   } else if(pockID == 5){
-    x = width, y = height;
+    x = width + corner, y = height + corner;
   }
   ball pocketBall = ball(vector(x, y), pockID);
   return collideHelper(cur, pocketBall, dt, POCKET_RADIUS - BALL_RADIUS);
 }
 
+//Returns at what time the ball collides with the pocket walls (ie the tiny ones right next to the pockets)
+double collidePocketWall(ball cur, int pockWallID, double dt) {
+    double width = WIDTH, height = HEIGHT;
+    return 5;
+    //TO BE IMPLEMENTED
+}
+
+//Returns the projection of vector a onto vector b
 vector proj(vector a, vector b) {
   return dot(a, b) / square(abs(b)) * b;
 }
 
+//Adjusts velocities when two balls collide
 void handleCollide(ball &a, ball &b) {
   vector dd = b.pos - a.pos;
   vector va = a.vel, vb = b.vel;
@@ -135,6 +178,7 @@ void handleCollide(ball &a, ball &b) {
   b.vel = vbt + BALL_RES * (va - vat);
 }
 
+//Adjusts velocities when a ball collides with the wall
 void handleCollideWall(ball &a, int wallId) {
   if (wallId == 0 || wallId == 2) {
     a.vel = vector(a.vel.X, -RAIL_RES * a.vel.Y);
@@ -143,10 +187,18 @@ void handleCollideWall(ball &a, int wallId) {
   }
 }
 
+//Adjusts velocities when a ball goes in a pocket
 void handleCollidePocket(ball &a, int pocketID) {
   a.inpocket = pocketID;
+  //PROBABLY SHOULD DO SOMETHING HERE
 }
 
+//Adjusts velocities when a ball collides with a pocketwall
+void handleCollidePocketWall(ball &a, int pocketWallID) {
+    //TO BE IMPLEMENTED
+}
+
+//From one state, calculates the next step
 state next(state cur) {
   double dt = DEFAULT_TIME_STEP;
   state nxt = cur;
@@ -212,10 +264,12 @@ state next(state cur) {
   return nxt;
 }
 
+//Returns random num from -.5 to .5
 double rnd() {
   return (rand() % 100 - 50) / 100.;
 }
 
+//Default state for our simulation
 state makeDefaultState() {
   state s;
   s.time = 0;
@@ -228,6 +282,7 @@ state makeDefaultState() {
   return s;
 }
 
+//Displays stuff
 void disp(state cur) {
   printf("TIME=%f\n", cur.time);
   for(int i = 0; i < cur.numballs; ++i) {
@@ -237,6 +292,7 @@ void disp(state cur) {
   printf("==============\n");
 }
 
+//Whooo starts simulation
 int main() {
   state cur;
   cur = makeDefaultState();
