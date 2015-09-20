@@ -585,7 +585,7 @@ Point2f mult(Mat m, Point2f p) {
         Point2f p = points[i];
         printf("BALL(%d) at %lf, %lf\n", i, points[i].x, points[i].y);
         Point2f transform = mult(transmtx, p);
-        transform = Point2f(transform.x, transform.y);
+        transform = Point2f(transform.x / 2, transform.y / 2);
         printf("(transformed at %lf, %lf\n", transform.x, transform.y);
         if (transform.x < 0 || transform.x > W || transform.y < 0 || transform.y > H) continue;
         int ballcolor = getColor(p);

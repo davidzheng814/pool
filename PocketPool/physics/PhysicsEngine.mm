@@ -559,6 +559,7 @@ state makeDefaultState() {
 //}
 
 +(NSArray *) findAllStates:(NSArray *)ballPositions withFingerPosition:(CGPoint)fingerPosition {
+    NSLog(@"ball Positions: %@", ballPositions);
     ball balls_arr[16];
     int ind = 0;
     const double scale = -0.8;
@@ -570,7 +571,8 @@ state makeDefaultState() {
         ball new_ball;
         new_ball.pos = vector(x, y);
         if (ind == 0)
-            new_ball.vel = vector(scale*(fingerPosition.x - x), scale*(fingerPosition.y - y));
+            new_ball.vel = vector(0, 1);
+        //vector(scale*(fingerPosition.x - x), scale*(fingerPosition.y - y));
         else
             new_ball.vel = vector(0, 0);
         balls_arr[ind] = new_ball;
