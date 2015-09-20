@@ -10,22 +10,18 @@
 	<string>PocketPool</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>57D45B3DA1863BE7FFCC8D46BF9991746D00C1D0</key>
-		<string>https://github.com/Fl0p/OpenCV-iOS.git</string>
 		<key>B2594B83EF297080D79833020A16AE54AC481FFB</key>
-		<string>https://github.com/davidzheng814/Pool.git</string>
+		<string>https://github.com/davidzheng814/pool.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>PocketPool/PocketPool.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>57D45B3DA1863BE7FFCC8D46BF9991746D00C1D0</key>
-		<string>../../../../OpenCV-iOS</string>
 		<key>B2594B83EF297080D79833020A16AE54AC481FFB</key>
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/davidzheng814/Pool.git</string>
+	<string>https://github.com/davidzheng814/pool.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
@@ -38,15 +34,7 @@
 			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>B2594B83EF297080D79833020A16AE54AC481FFB</string>
 			<key>IDESourceControlWCCName</key>
-			<string>davidzheng814:pool</string>
-		</dict>
-		<dict>
-			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
-			<string>public.vcs.git</string>
-			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>57D45B3DA1863BE7FFCC8D46BF9991746D00C1D0</string>
-			<key>IDESourceControlWCCName</key>
-			<string>OpenCV-iOS</string>
+			<string>pool</string>
 		</dict>
 	</array>
 </dict>
