@@ -27,7 +27,7 @@
     NSMutableArray *ballArray = [NSMutableArray array];
     for (int i = 0; i < 16; i++) {
         NSString *ballName = [NSString stringWithFormat:@"ball%d.png", i];
-        UIImageView *ballImage = [[UIImageView alloc] initWithFrame:CGRectMake(50, 50, 25, 25)];
+        UIImageView *ballImage = [[UIImageView alloc] initWithFrame:CGRectMake(50, 50, 20, 20)];
         ballImage.image = [UIImage imageNamed:ballName];
         [self addSubview:ballImage];
         ballImage.hidden = YES;
@@ -47,7 +47,7 @@
         if (position.x != 1000000) {
             ballImage.hidden = NO;
             ballImage.center = displayPosition;
-            NSLog(@"Original position (%f, %f) and display position (%f, %f).", i, position.x, position.y, displayPosition.x, displayPosition.y);
+            NSLog(@"Original position (%f, %f) and display position (%f, %f).", position.x, position.y, displayPosition.x, displayPosition.y);
         } else {
             ballImage.hidden = YES;
         }
@@ -87,28 +87,34 @@
                              NSArray *ballPositions = ballFrames[index];
                              NSValue *positionVal = ballPositions[i];
                              CGPoint position = [positionVal CGPointValue];
+                             CGPoint location = [TableView convertPointToDisplayPoint:position];
                              UIImageView *ballImage = self.ballViewArray[i];
                              if (position.x > 0 && position.y > 0) {
                                  ballImage.hidden = NO;
-                                 ballImage.center = position;
+                                 ballImage.center = location;
                              } else {
                                  ballImage.hidden = YES;
                              }
                          }
                      }
                      completion:^(BOOL finished) {
-                         if (index == max) {
+                         int newIndex = index + 1;
+                         if (newIndex == max) {
                              NSLog(@"Animation complete.");
                          } else {
-                             int newIndex = index + 1;
                              [self animateImageWithBallFrames:ballFrames withIndex:newIndex withMaxIndex:max];
                          }
                      }];
 }
 
 + (CGPoint)convertPointToDisplayPoint:(CGPoint)point {
-    float x = point.x * 173.333 + 55;
-    float y = point.y * 173.333 + 57;
+    float x = point.x * 208.4 + 55;
+    float y = point.y * 208.4 + 57;
+    return CGPointMake(x, y);
+}
++ (CGPoint)convertDisplayPointToPoint:(CGPoint)point {
+    float x = (point.x - 55) / 208.4;
+    float y = (point.y - 57) / 208.4;
     return CGPointMake(x, y);
 }
 

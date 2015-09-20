@@ -17,5 +17,5 @@
                          withIndex:(int)index
                       withMaxIndex:(int)max;
 + (CGPoint)convertPointToDisplayPoint:(CGPoint)point;
-
++ (CGPoint)convertDisplayPointToPoint:(CGPoint)point;
 @end

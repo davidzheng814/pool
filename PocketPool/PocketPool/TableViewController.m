@@ -27,12 +27,7 @@
     // Create test/default ball positions
     NSMutableArray *defaultBallPositions = [NSMutableArray array];
     for (int i = 0; i < 3; i++) {
-        CGPoint point = CGPointMake(250 + i * 26, 250 + i * 10);
-        NSValue *value = [NSValue valueWithCGPoint:point];
-        [defaultBallPositions addObject:value];
-    }
-    for (int i = 0; i < 5; i++) {
-        CGPoint point = CGPointMake(250 - i * 26, 250 - i * 10);
+        CGPoint point = CGPointMake(1.5 + i * .2, .5 + i * .1);
         NSValue *value = [NSValue valueWithCGPoint:point];
         [defaultBallPositions addObject:value];
     }
@@ -74,7 +69,7 @@
 //    CGRect cropRect = CGRectMake(0.0, 0.0, 20.0, 20.0);
 //    UIImageView *testImageView = [[UIImageView alloc] initWithFrame:cropRect];
 //    testImageView.image = testImage;
-//    testImageView.center = CGPointMake(100, 317);
+//    testImageView.center = CGPointMake(576, 107);
 //    [self.view addSubview:testImageView];
 }
 
@@ -124,8 +119,10 @@
 
 - (void)releaseTap { // Table will animate
     // Fetch frames from physics engine
-    NSArray *ballFrames = [PhysicsEngine findAllStates:self.ballPositions withFingerPosition:self.fingerPosition];
-    
+    CGPoint fingerLocation = [TableView convertDisplayPointToPoint:self.fingerPosition];
+//    NSValue *fingerLocationVal = [NSValue valueWithCGPoint:fingerLocation];
+    NSArray *ballFrames = [PhysicsEngine findAllStates:self.ballPositions withFingerPosition:[TableView convertDisplayPointToPoint:self.fingerPosition]];
+
     // Create test frames:
 //    NSMutableArray *ballFrames = [NSMutableArray array];
 //    for (int j = 0; j < 20; j++) {
@@ -138,10 +135,13 @@
 //        [ballFrames addObject:ballPositions];
 //    }
     
+    // Disable gestures
+    
+    
     // Animate
     [self.tableView animateImageWithBallFrames:ballFrames
                                      withIndex:0
-                                  withMaxIndex:19];
+                                  withMaxIndex:(int)[ballFrames count]];
 }
 
 @end

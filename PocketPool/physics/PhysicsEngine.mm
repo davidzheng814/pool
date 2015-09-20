@@ -36,7 +36,9 @@ const double SIDE_WITHIN_WALL = .063;
 const double SIDE_SLOPE = 3;
 const double SIDE_RADIUS = .063;
 
-const double BALL_RADIUS = .0285;
+//const double BALL_RADIUS = .0285;
+
+const double BALL_RADIUS = .0485;
 const double WIDTH = 2.5;
 const double HEIGHT = 1.25;
 const double FRICTION = 0.1;
@@ -300,7 +302,7 @@ void handleCollidePocketWall(ball &a, int pocketWallID) {
 }
 
 bool onTable(state cur, int ballID){
-    return cur.balls[ballID].pos.X == 1000000;
+    return cur.balls[ballID].pos.X != 1000000;
 }
 
 //From one state, calculates the next step
@@ -559,7 +561,7 @@ state makeDefaultState() {
 +(NSArray *) findAllStates:(NSArray *)ballPositions withFingerPosition:(CGPoint)fingerPosition {
     ball balls_arr[16];
     int ind = 0;
-    const double scale = 0.5;
+    const double scale = -0.8;
     for (NSValue *pointValue in ballPositions) {
         CGPoint point = [pointValue CGPointValue];
         
