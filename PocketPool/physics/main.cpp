@@ -11,8 +11,10 @@ typedef std::complex<double> vector;
 
 const double CORNER_WITHIN_WALL = .03; //perp distance between center of pocket and the rail
 const double SIDE_WITHIN_WALL = .05;
-const double CORNER_WALL_MISSING = .03; //amount of wall that's missing in each direction around the corner
+const double CORNER_WALL_MISSING = .04; //amount of wall that's missing in each direction around the corner
 const double SIDE_WALL_MISSING = .05; //amount of wall missing on either side around the side
+const double CORNER_SLOPE = 1; //slope of the top left corner wall
+const double SIDE_SLOPE = 2;
 
 const double BALL_RADIUS = .029;
 const double POCKET_RADIUS = .05;
@@ -29,13 +31,13 @@ struct ball {
   vector pos;
   vector vel;
   int id;
-  int inpocket; // 0 if not in pocket
+  int inPocket; // 0 if not in pocket
 
   ball(vector _pos, int _id) {
     pos = _pos;
     vel = vector();
     id = _id;
-    inpocket = 0;
+    inPocket = -1;
   }
 
   void run(double dt) {
@@ -66,6 +68,11 @@ double dot(vector a, vector b) {
 //Lulz take the square of a number
 inline double square(double x) {
   return x * x;
+}
+
+//Returns the projection of vector a onto vector b
+vector proj(vector a, vector b) {
+  return dot(a, b) / square(abs(b)) * b;
 }
 
 //Uses law of cosines to calculate when ball a travels within (BALL_RADIUS+radius2) of ball b
@@ -139,6 +146,7 @@ double collideWall(ball cur, int wallId, double dt) {
 }
 
 //Returns at what time the ball colliddes with the pocket (ie gets sunk)
+//Pockets are labeled as such - top row is 012, bottom row is 345
 double collidePocket(ball cur, int pockID, double dt) {
   double width = WIDTH, height = HEIGHT, corner = CORNER_WITHIN_WALL, side = SIDE_WITHIN_WALL;
   double x = 0,y = 0;
@@ -159,16 +167,73 @@ double collidePocket(ball cur, int pockID, double dt) {
   return collideHelper(cur, pocketBall, dt, POCKET_RADIUS - BALL_RADIUS);
 }
 
+//Used to help determine corner pocket walls
+double collideCornerPocketWallHelper0(double x, double y, vector v, double dt){
+  double corner = CORNER_WALL_MISSING, slope = CORNER_SLOPE;
+  double newX = x + dt * v.X, newY = y + dt * v.Y;
+  vector norm = v - proj(v, vector(1, slope));
+  if(abs(proj(vector(-newX,corner-newY), norm)) < BALL_RADIUS && newX < 0){
+    return (abs(proj(vector(corner-x,-y), norm) - BALL_RADIUS) / abs(norm));
+  } return -1;
+}
+double collideCornerPocketWallHelper1(double x, double y, vector v, double dt){
+  double corner = CORNER_WALL_MISSING, slope = CORNER_SLOPE;
+  double newX = x + dt * v.X, newY = y + dt * v.Y;
+  vector norm = v - proj(v, vector(1, slope));
+  if(abs(proj(vector(corner-newX,-newY), norm)) < BALL_RADIUS && newY < 0){
+    return (abs(proj(vector(corner-x,-y), norm) - BALL_RADIUS) / abs(norm));
+  } return -1;
+}
+double collideCornerPocketWallHelper2(double x, double y, vector v, double dt){
+  double side = SIDE_WALL_MISSING, slope = -SIDE_SLOPE;
+  double newX = x + dt * v.X, newY = y + dt * v.Y;
+  vector norm = v - proj(v, vector(1, slope));
+  if(abs(proj(vector(-side-newX,-newY), norm)) < BALL_RADIUS && newY < 0){
+    return (abs(proj(vector(-side-x,-y), norm) - BALL_RADIUS) / abs(norm));
+  } return -1;
+}
+double collideCornerPocketWallHelper3(double x, double y, vector v, double dt){
+  double side = SIDE_WALL_MISSING, slope = SIDE_SLOPE;
+  double newX = x + dt * v.X, newY = y + dt * v.Y;
+  vector norm = v - proj(v, vector(1, slope));
+  if(abs(proj(vector(side-newX,-newY), norm)) < BALL_RADIUS && newY < 0){
+    return (abs(proj(vector(side-x,-y), norm) - BALL_RADIUS) / abs(norm));
+  } return -1;
+}
 //Returns at what time the ball collides with the pocket walls (ie the tiny ones right next to the pockets)
+//Pocket walls are labeled as such - top row is 012345, bottom row is 67891011
+//For bottom pocket walls, REFLECT everything vertically to create parallel cases
+//For right corner pocket walls, REFLECT everything horizontally to create parallel cases
 double collidePocketWall(ball cur, int pockWallID, double dt) {
     double width = WIDTH, height = HEIGHT;
-    return 5;
-    //TO BE IMPLEMENTED
-}
-
-//Returns the projection of vector a onto vector b
-vector proj(vector a, vector b) {
-  return dot(a, b) / square(abs(b)) * b;
+    double x = cur.pos.X, y = cur.pos.Y; //ball location relative to the center of the pocket
+    double vx = cur.vel.X, vy = cur.vel.Y;
+    double slope; 
+    if(pockWallID == 0){
+      return collideCornerPocketWallHelper0(cur.pos.X, cur.pos.Y, cur.vel, dt);
+    } else if(pockWallID == 1){
+      return collideCornerPocketWallHelper1(cur.pos.X, cur.pos.Y, cur.vel, dt);
+    }else if(pockWallID == 2){
+      return collideCornerPocketWallHelper2(cur.pos.X - width / 2, cur.pos.Y, cur.vel, dt);
+    }else if(pockWallID == 3){
+      return collideCornerPocketWallHelper3(cur.pos.X - width / 2, cur.pos.Y, cur.vel, dt);
+    }else if(pockWallID == 4){
+      return collideCornerPocketWallHelper1(-(cur.pos.X - width), cur.pos.Y, vector(-cur.vel.X, cur.vel.Y), dt);
+    }else if(pockWallID == 5){
+      return collideCornerPocketWallHelper1(-(cur.pos.X - width), cur.pos.Y, vector(-cur.vel.X, cur.vel.Y), dt);
+    }else if(pockWallID == 6){
+      return collideCornerPocketWallHelper1(cur.pos.X, -(cur.pos.Y - height), vector(cur.vel.X, -cur.vel.Y), dt);
+    }else if(pockWallID == 7){
+      return collideCornerPocketWallHelper1(cur.pos.X, -(cur.pos.Y - height), vector(cur.vel.X, -cur.vel.Y), dt);
+    }else if(pockWallID == 8){
+      return collideCornerPocketWallHelper1(cur.pos.X - width / 2, -(cur.pos.Y - height), vector(cur.vel.X, -cur.vel.Y), dt);
+    }else if(pockWallID == 9){
+      return collideCornerPocketWallHelper1(cur.pos.X - width / 2, -(cur.pos.Y - height), vector(cur.vel.X, -cur.vel.Y), dt);
+    }else if(pockWallID == 10){
+      return collideCornerPocketWallHelper1(-(cur.pos.X - width), -(cur.pos.Y - height), vector(-cur.vel.X, -cur.vel.Y), dt);
+    }else if(pockWallID == 11){
+      return collideCornerPocketWallHelper1(-(cur.pos.X - width), -(cur.pos.Y - height), vector(-cur.vel.X, -cur.vel.Y), dt);
+    }
 }
 
 //Adjusts velocities when two balls collide
@@ -192,13 +257,28 @@ void handleCollideWall(ball &a, int wallId) {
 
 //Adjusts velocities when a ball goes in a pocket
 void handleCollidePocket(ball &a, int pocketID) {
-  a.inpocket = pocketID;
+  a.inPocket = pocketID;
   //PROBABLY SHOULD DO SOMETHING HERE
 }
 
 //Adjusts velocities when a ball collides with a pocketwall
 void handleCollidePocketWall(ball &a, int pocketWallID) {
-    //TO BE IMPLEMENTED
+  double slope = 0;
+    if(pocketWallID == 0 || pocketWallID == 1 || pocketWallID == 10 || pocketWallID == 11){
+      slope = CORNER_SLOPE;
+    } else if(pocketWallID == 4 || pocketWallID == 5 || pocketWallID == 6 || pocketWallID == 7){
+      slope = -CORNER_SLOPE;
+    } else if(pocketWallID == 2 || pocketWallID == 9){
+      slope = -SIDE_SLOPE;
+    } else if(pocketWallID == 3 || pocketWallID == 8){
+      slope = SIDE_SLOPE;
+    }
+    vector tan = proj(a.vel, vector(1, slope));
+    a.vel = tan - RAIL_RES * (a.vel - tan);
+}
+
+bool onTable(state cur, int ballID){
+  return cur.balls[ballID].inPocket == -1;
 }
 
 //From one state, calculates the next step
@@ -211,43 +291,67 @@ state next(state cur) {
   int collidei = -1, collidej = -1;
   int collideType = -1; // -1: no, 0: balls, 1: pocket, 2: wall
   for(int i = 0; i < n; ++i) {
-    for(int j = 1; j < n; ++j) {
-      double t = collideBalls(cur.balls[i], cur.balls[j], dt);
-      if (t != -1 && t < dt) {
-        collidei = i;
-        collidej = j;
-        collideType = 0;
-        dt = t;
+    if(onTable(cur, i)){
+      for(int j = 1; j < n; ++j) {
+        if(onTable(cur, j)){
+          double t = collideBalls(cur.balls[i], cur.balls[j], dt);
+          if (t != -1 && 0 < t && t < dt) {
+            collidei = i;
+            collidej = j;
+            collideType = 0;
+            dt = t;
+          }
+        }
       }
     }
   }
 
   for(int i = 0; i < n; ++i) {
-    for(int j = 0; j < 6; ++j) {
-      double t = collidePocket(cur.balls[i], j, dt);
-      if(t != -1 && t < dt) {
-        collidei = i;
-        collidej = j;
-        collideType = 1;
-        dt = t;
+    if(onTable(cur, i)){
+      for(int j = 0; j < 6; ++j) {
+        double t = collidePocket(cur.balls[i], j, dt);
+        if(t != -1 && 0 < t && t < dt) {
+          collidei = i;
+          collidej = j;
+          collideType = 1;
+          dt = t;
+        }
       }
     }
   }
 
   for(int i = 0; i < n; ++i) {
-    for(int j = 0; j < 4; ++j) {
-      double t = collideWall(cur.balls[i], j, dt);
-      if (t != -1 && t < dt) {
-        collidei = i;
-        collidej = j;
-        collideType = 2;
-        dt = t;
+    if(onTable(cur,i)){
+      for(int j = 0; j < 4; ++j) {
+        double t = collideWall(cur.balls[i], j, dt);
+        if (t != -1 && 0 < t && t < dt) {
+          collidei = i;
+          collidej = j;
+          collideType = 2;
+          dt = t;
+        }
+      }
+    }
+  }
+  
+  for(int i = 0; i < n; ++i) {
+    if(onTable(cur,i)){
+      for(int j = 0; j < 12; ++j) {
+        double t = collidePocketWall(cur.balls[i], j, dt);
+        if (t != -1 && 0 < t && t < dt) {
+          collidei = i;
+          collidej = j;
+          collideType = 3;
+          dt = t;
+        }
       }
     }
   }
 
   for(int i = 0; i < n; ++i) {
-    cur.balls[i].run(dt);
+    if(onTable(cur, i)){
+      cur.balls[i].run(dt);
+    }
   }
 
   if (collideType == 0) {
@@ -263,6 +367,11 @@ state next(state cur) {
     handleCollideWall(cur.balls[collidei], collidej);
     // handle wall collision between collidei with wall collidej
   }
+  else if (collideType == 3) {
+    printf("Collision type 3, dt = %.02lf, i: %d j: %d\n", dt, collidei, collidej);
+    handleCollidePocketWall(cur.balls[collidei], collidej);
+    // handle wall collision between collidei with pocket wall collidej
+  }
 
   nxt.time += dt;
   return nxt;
@@ -277,14 +386,12 @@ double rnd() {
 state makeDefaultState() {
   state s;
   s.time = 0;
-  s.numballs = 2;
+  s.numballs = 1;
   s.balls = (ball *)malloc(s.numballs*sizeof(ball));
   for(int i = 0; i < s.numballs; ++i) {
-    s.balls[i] = ball(vector(.5, .1), i);
-    s.balls[i].vel = vector(0, 1);
+    s.balls[i] = ball(vector(.04, .1), i);
+    s.balls[i].vel = vector(0, -1);
   }
-  s.balls[1].pos = vector(.5, 1);
-  s.balls[1].vel = vector(0,-1);
   return s;
 }
 
@@ -332,13 +439,12 @@ int main() {
   state cur;
   cur = makeDefaultState();
   printf("STARTING SIMULATION\n");
-  /*(disp(cur);
-   *for(int i = 0; i < 10; ++i) {
-   * cur = next(cur);
-   * disp(cur);
-  }*/
-  state *stateList = allStates(cur);
   for(int i = 0; i < 10; ++i) {
-    disp(stateList[i]);
+    cur = next(cur);
+    disp(cur);
   }
+  /*state *stateList = allStates(cur);
+  *for(int i = 0; i < 10; ++i) {
+  * disp(stateList[i]);
+  }*/
 }
