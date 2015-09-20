@@ -12,5 +12,9 @@
 
 - (void)setUp;
 - (void)renderImageWithBallPositions:(NSArray *)ballPositions;
+- (void)animateImageWithBallPositions:(NSArray *)ballPositions;
+- (void)animateImageWithBallFrames:(NSArray *)ballFrames // array of ballPosition arrays
+                         withIndex:(int)index
+                      withMaxIndex:(int)max;
 
 @end

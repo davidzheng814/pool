@@ -82,15 +82,13 @@
     [self.tableView bringSubviewToFront:self.ringImageView];
 }
 
-- (void)doDoubleTap:(UITapGestureRecognizer *)recognizer { // Cancel tap
-    self.fingerPosition = CGPointMake(-1, -1);
-    self.ringImageView.hidden = YES;
-    [self rerenderTableImage];
+- (void)doDoubleTap:(UITapGestureRecognizer *)recognizer { // Release tap
+    [self releaseTap];
 }
 
 - (IBAction)handlePan:(UIPanGestureRecognizer *)recognizer {
     self.fingerPosition = [recognizer locationInView:self.tableView];
-    if (hypot((self.ringImageView.center.x - self.fingerPosition.x), (self.ringImageView.center.y - self.fingerPosition.y)) < 50) {
+    if (recognizer.state == UIGestureRecognizerStateBegan && hypot((self.ringImageView.center.x - self.fingerPosition.x), (self.ringImageView.center.y - self.fingerPosition.y)) < 50) {
         CGPoint translation = [recognizer translationInView:self.tableView];
         self.fingerPosition = CGPointMake(self.fingerPosition.x + translation.x, self.fingerPosition.y + translation.y);
         [recognizer setTranslation:CGPointMake(0, 0) inView:self.tableView];
@@ -99,6 +97,25 @@
     [self rerenderTableImage];
     self.ringImageView.hidden = NO;
     [self.tableView bringSubviewToFront:self.ringImageView];
+}
+
+- (void)releaseTap { // Table will animate
+    // Ask physics engine for frames
+    // Test frames:
+    NSMutableArray *ballFrames = [NSMutableArray array];
+    for (int j = 0; j < 20; j++) {
+        NSMutableArray *ballPositions = [NSMutableArray array];
+        for (int i = 0; i < 16; i++) {
+            CGPoint point = CGPointMake(50 + j * 5 + i * 26, 50 + j * 1 + i * 10);
+            NSValue *value = [NSValue valueWithCGPoint:point];
+            [ballPositions addObject:value];
+        }
+        [ballFrames addObject:ballPositions];
+//        [self.tableView animateImageWithBallPositions:ballPositions];
+    }
+    [self.tableView animateImageWithBallFrames:ballFrames
+                                     withIndex:0
+                                  withMaxIndex:19];
 }
 
 @end
