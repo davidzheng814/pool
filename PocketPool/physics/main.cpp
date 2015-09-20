@@ -185,37 +185,54 @@ double collidePocket(ball cur, int pockID, double dt) {
   return collideHelper(cur, pocketBall, dt, pocket - BALL_RADIUS);
 }
 
+double min(double x, double y){
+  if(x < y){return x;}
+  else{return y;}
+}
+
 //Used to help determine corner pocket walls
 double collideCornerPocketWallHelper0(double x, double y, vector v, double dt){
-  double corner = CORNER_WALL_MISSING, slope = CORNER_SLOPE;
+  double corner = CORNER_WALL_MISSING, slope = CORNER_SLOPE, r = BALL_RADIUS;
   double newX = x + dt * v.X, newY = y + dt * v.Y;
   vector norm = v - proj(v, vector(1, slope));
-  if(abs(proj(vector(-newX,corner-newY), norm)) < BALL_RADIUS && newX < 0){
-    return (abs(proj(vector(corner-x,-y), norm) - BALL_RADIUS) / abs(norm));
+  if(abs(proj(vector(-newX,corner-newY), norm)) < r && newX < 0){
+    double t1 = (abs(proj(vector(corner-x,-y), norm) - r) / abs(norm));
+    double t2 = (r - x) / v.X;
+    double tFinal = min(t1, t2);
+    if(tFinal > 0){return tFinal;}
   } return -1;
 }
 double collideCornerPocketWallHelper1(double x, double y, vector v, double dt){
-  double corner = CORNER_WALL_MISSING, slope = 1 / CORNER_SLOPE;
+  double corner = CORNER_WALL_MISSING, slope = 1 / CORNER_SLOPE, r = BALL_RADIUS;
   double newX = x + dt * v.X, newY = y + dt * v.Y;
   vector norm = v - proj(v, vector(1, slope));
-  if(abs(proj(vector(corner-newX,-newY), norm)) < BALL_RADIUS && newY < 0){
-    return (abs(proj(vector(corner-x,-y), norm) - BALL_RADIUS) / abs(norm));
+  if(abs(proj(vector(corner-newX,-newY), norm)) < r && newY < 0){
+    double t1 = (abs(proj(vector(corner-x,-y), norm) - r) / abs(norm));
+    double t2 = (r - y) / v.Y;
+    double tFinal = min(t1, t2);
+    if(tFinal > 0){return tFinal;}
   } return -1;
 }
 double collideCornerPocketWallHelper2(double x, double y, vector v, double dt){
-  double side = SIDE_WALL_MISSING, slope = -SIDE_SLOPE;
+  double side = SIDE_WALL_MISSING, slope = -SIDE_SLOPE, r = BALL_RADIUS;
   double newX = x + dt * v.X, newY = y + dt * v.Y;
   vector norm = v - proj(v, vector(1, slope));
-  if(abs(proj(vector(-side-newX,-newY), norm)) < BALL_RADIUS && newY < 0){
-    return (abs(proj(vector(-side-x,-y), norm) - BALL_RADIUS) / abs(norm));
+  if(abs(proj(vector(-side-newX,-newY), norm)) < r && newY < 0){
+    double t1 = (abs(proj(vector(-side-x,-y), norm) - r) / abs(norm));
+    double t2 = (r - y) / v.Y;
+    double tFinal = min(t1, t2);
+    if(tFinal > 0){return tFinal;}
   } return -1;
 }
 double collideCornerPocketWallHelper3(double x, double y, vector v, double dt){
-  double side = SIDE_WALL_MISSING, slope = SIDE_SLOPE;
+  double side = SIDE_WALL_MISSING, slope = SIDE_SLOPE, r = BALL_RADIUS;
   double newX = x + dt * v.X, newY = y + dt * v.Y;
   vector norm = v - proj(v, vector(1, slope));
-  if(abs(proj(vector(side-newX,-newY), norm)) < BALL_RADIUS && newY < 0){
-    return (abs(proj(vector(side-x,-y), norm) - BALL_RADIUS) / abs(norm));
+  if(abs(proj(vector(side-newX,-newY), norm)) < r && newY < 0){
+    double t1 = (abs(proj(vector(side-x,-y), norm) - r) / abs(norm));
+    double t2 = (r - y) / v.Y;
+    double tFinal = min(t1, t2);
+    if(tFinal > 0){return tFinal;}
   } return -1;
 }
 //Returns at what time the ball collides with the pocket walls (ie the tiny ones right next to the pockets)
