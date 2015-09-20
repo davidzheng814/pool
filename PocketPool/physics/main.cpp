@@ -2,14 +2,16 @@
 ball structure = vector pos, vector vel, int id, int inPocket (-1 if not in pocket)
 state structure = double time, int numballs, ball *balls
 
-Given a beginning state with time = 0, return a giant list of states that are the states at multiples of a time step
-state* allStates(state beginning)
+Given a beginning state with time = 0, return a giant list of states that are the states at multiples of a time DEFAULT_TIME_STEP
+    state* allStates(state beginning)
 
 Gives the best possible to hit the cue ball (balls[0]) at
 idArray is the vector of the id's of balls that we can possibly sink
 -10 is the default "we have no good move" value
+    double getBestMove(state cur, std::vector<int> idArray)
 
-double getBestMove(state cur, std::vector<int> idArray)
+Given an angle at which we strike the cue ball, give the vector position of the ghost of the cue ball upon first collision
+    vector getGhostImage(state cur, double angle){
 
 */
 
@@ -526,6 +528,56 @@ double getBestMove(state cur, std::vector<int> idArray){
     }
   }
   return bestMove;
+}
+
+//Given an angle at which we strike the cue ball, give the vector position of the ghost of the cue ball upon first collision
+vector getGhostImage(state cur, double angle){
+  int n = cur.numballs;
+
+  ball copyCue = ball(vector(cur.balls[0].X, cur.balls[0].Y), -1);
+  copyCue.vel = vector(cos(angle), sin(angle));
+
+  double dt = 10000000;
+  for(int i = 0; i < n; ++i) {
+    if(onTable(cur, i)){
+      for(int j = 1; j < n; ++j) {
+        if(onTable(cur, j)){
+          double t = collideBalls(cur.balls[i], cur.balls[j], dt);
+          if (0 < t && t < dt) { dt = t; }
+        }
+      }
+    }
+  }
+
+  for(int i = 0; i < n; ++i) {
+    if(onTable(cur, i)){
+      for(int j = 0; j < 6; ++j) {
+        double t = collidePocket(cur.balls[i], j, dt);
+        if (0 < t && t < dt) { dt = t; }
+      }
+    }
+  }
+
+  for(int i = 0; i < n; ++i) {
+    if(onTable(cur,i)){
+      for(int j = 0; j < 4; ++j) {
+        double t = collideWall(cur.balls[i], j, dt);
+        if (0 < t && t < dt) { dt = t; }
+      }
+    }
+  }
+  
+  for(int i = 0; i < n; ++i) {
+    if(onTable(cur,i)){
+      for(int j = 0; j < 12; ++j) {
+        double t = collidePocketWall(cur.balls[i], j, dt);
+        if (0 < t && t < dt) { dt = t; }
+      }
+    }
+  }
+
+  copyCue.run(dt);
+  return copyCue.pos;
 }
 
 //Displays stuff
