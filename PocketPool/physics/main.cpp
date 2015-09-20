@@ -9,19 +9,21 @@ typedef std::complex<double> vector;
 #define X real()
 #define Y imag()
 
-const double CORNER_WITHIN_WALL = .03; //perp distance between center of pocket and the rail
-const double SIDE_WITHIN_WALL = .05;
-const double CORNER_WALL_MISSING = .04; //amount of wall that's missing in each direction around the corner
-const double SIDE_WALL_MISSING = .05; //amount of wall missing on either side around the side
-const double CORNER_SLOPE = 1; //slope of the top left corner wall
-const double SIDE_SLOPE = 2;
+const double CORNER_WITHIN_WALL = .045; //perp distance between center of pocket and the rail
+const double CORNER_WALL_MISSING = .09; //amount of wall that's missing in each direction around the corner
+const double CORNER_SLOPE = 1.4; //slope of the top left corner wall
+const double CORNER_RADIUS = .076;
 
-const double BALL_RADIUS = .029;
-const double POCKET_RADIUS = .05;
-const double WIDTH = 3;
-const double HEIGHT = 1.5;
+const double SIDE_WALL_MISSING = .076; //amount of wall missing on either side around the side
+const double SIDE_WITHIN_WALL = .063;
+const double SIDE_SLOPE = 3;
+const double SIDE_RADIUS = .063;
+
+const double BALL_RADIUS = .0285;
+const double WIDTH = 2.5;
+const double HEIGHT = 1.25;
 const double FRICTION = 0.1;
-const double RAIL_RES = 0.75;
+const double RAIL_RES = 0.8;
 const double BALL_RES = 0.95;
 
 const double MAX_ANIMATION_LENGTH = .5;
@@ -149,22 +151,22 @@ double collideWall(ball cur, int wallId, double dt) {
 //Pockets are labeled as such - top row is 012, bottom row is 345
 double collidePocket(ball cur, int pockID, double dt) {
   double width = WIDTH, height = HEIGHT, corner = CORNER_WITHIN_WALL, side = SIDE_WITHIN_WALL;
-  double x = 0,y = 0;
+  double x = 0,y = 0, pocket = 0;
   if(pockID == 0){
-    x = -corner, y = -corner;
+    x = -corner, y = -corner, pocket = CORNER_RADIUS;
   } else if (pockID == 1){
-    x = width / 2, y = -side;
+    x = width / 2, y = -side, pocket = SIDE_RADIUS;
   } else if (pockID == 2){
-    x = width + corner, y = -corner;
+    x = width + corner, y = -corner, pocket = CORNER_RADIUS;
   } else if (pockID == 3){
-    x = -corner, y = height + corner;
+    x = -corner, y = height + corner, pocket = CORNER_RADIUS;
   } else if (pockID == 4){
-    x = width / 2, y = height + side;
+    x = width / 2, y = height + side, pocket = SIDE_RADIUS;
   } else if(pockID == 5){
-    x = width + corner, y = height + corner;
+    x = width + corner, y = height + corner, pocket = CORNER_RADIUS;
   }
   ball pocketBall = ball(vector(x, y), pockID);
-  return collideHelper(cur, pocketBall, dt, POCKET_RADIUS - BALL_RADIUS);
+  return collideHelper(cur, pocketBall, dt, pocket - BALL_RADIUS);
 }
 
 //Used to help determine corner pocket walls
@@ -177,7 +179,7 @@ double collideCornerPocketWallHelper0(double x, double y, vector v, double dt){
   } return -1;
 }
 double collideCornerPocketWallHelper1(double x, double y, vector v, double dt){
-  double corner = CORNER_WALL_MISSING, slope = CORNER_SLOPE;
+  double corner = CORNER_WALL_MISSING, slope = 1 / CORNER_SLOPE;
   double newX = x + dt * v.X, newY = y + dt * v.Y;
   vector norm = v - proj(v, vector(1, slope));
   if(abs(proj(vector(corner-newX,-newY), norm)) < BALL_RADIUS && newY < 0){
@@ -447,4 +449,51 @@ int main() {
   *for(int i = 0; i < 10; ++i) {
   * disp(stateList[i]);
   }*/
+}
+
+//If a ball goes on a straight line path from ball a to ball b, will there be miscellaneous collisions?
+bool isCollision(state cur, ball a, ball b){
+  for(int i = 0; i < cur.numballs; ++i){
+    ball c = cur.balls[i];
+    if(c.pos != a.pos && c.pos != b.pos){
+      vector bRel = b.pos - a.pos;
+      vector cRel = c.pos - a.pos;
+      double perpDist =  abs(cRel - proj(cRel, bRel));
+      if(perpDist < 2 * BALL_RADIUS && dot(bRel, cRel) > 0 && dot(bRel, b.pos - c.pos) > 0) {return true;}
+    }
+  }
+  return false;
+}
+
+//Hit ball a to hit ball b to go on a straight line path to ball c - return the unit vector at which we hit the first ball (radians)
+//If the such path intersects something else on the way, return vector(0,0)
+vector directShot(state cur, ball a, ball b, ball c){
+  vector cRelB = c.pos - b.pos;
+  ball ghostBall = ball(b.pos - 2 * BALL_RADIUS * cRelB / abs(cRelB), -1);
+  if(isCollision(cur, a, ghostBall) || isCollision(cur, b, c)){ return vector(0,0);}
+  vector path = ghostBall.pos - a.pos;
+  return (path / abs(path));
+}
+
+//Same thing as above, just with a combo
+vector comboShot(state cur, ball a, ball b, ball c, ball d){
+  vector dRelC = d.pos - c.pos;
+  ball ghostBall = ball(c.pos - 2 * BALL_RADIUS * dRelC / abs(dRelC), -1);
+  if(isCollision(cur, c, d)) { return vector(0,0);}
+  return directShot(cur, a, b, ghostBall);
+}
+
+//Gives the best possible unit vector to hit the cue ball (balls[0]) at
+//idArray is a list of the id's of balls that we can possibly sink in
+vector bestMoves(state cur, int* idArray){
+  ball cue = cur.balls[0];
+  vector bestMoves = vector(0,0);
+  double angleRanges = 0;
+  vector lowPockets[1] = {vector(0,0)};
+  for(int i = 1; i < cur.numballs; ++i){
+    ball newBall = cur.balls[i];
+    if(onTable(cur, i)){
+      
+    }
+  }
 }
