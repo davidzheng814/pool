@@ -90,7 +90,7 @@ void sortCorners(std::vector<cv::Point2f>& corners, cv::Point2f center)
 int assn[5000][5000];
 const int MAXB = 5001000;
 double sumx[MAXB], sumy[MAXB], cnt[MAXB];
-Mat imgs[MAXB];
+Mat original_img;
 Mat dfs_mask;
 
 int qi[MAXB];
@@ -124,6 +124,56 @@ void bfs(int i, int j, int cur) {
             push(i, j + 1, cur);
         }
     }
+}
+
+double colorDist(uint32_t a, uint32_t b) {
+    double sum = 0;
+    for(int i = 0; i < 3; ++i) {
+        double dx = (a >> (i * 8))&255  - (b >> (i * 8))&255;
+        sum += dx * dx;
+    }
+    return sum;
+}
+
+double scoreColor(int group, uint32_t color) {
+    double sum = 0;
+    for(int i = 0; i < original_img.rows; ++i) {
+        for(int j = 0; j < original_img.cols; ++j) {
+            if (assn[i][j] == group) {
+                double v = colorDist(original_img.at<uint32_t>(i, j), color);
+                sum += v;
+            }
+        }
+    }
+    return sum;
+}
+
+int getColor(Point2f point) {
+    int ic = point.x, jc = point.y;
+    int colors[] = {0, 21+256*(176+256*247), 8+256*(114+256*192), 48+256*(49 + 256*223), 133 + 256 * (67 + 256 * 78)        , 44 + 256 * (87 + 256 * 243), 61 + 256 * (110), 27 + 256 * (25 + 256 * 147), (1<<24)-1, 0, 0, 0, 0, 0, 0, 0};
+    for(int i = 8; i < 16; ++i) {
+        colors[i] = (colors[0] + colors[i - 7])/2;
+    }
+    int group = assn[ic][jc];
+    int ans = -1;
+    double bst = 999999999;
+    for(int i = 0; i < 16; ++i) {
+        double dst = scoreColor(group, colors[i]);
+        if (dst < bst) {
+            bst = dst;
+            ans = i;
+        }
+        /*
+        YELLOW	247	176	21
+        BLUE	6	114	192
+        RED	223	49	48
+        PURPLE	78	67	133
+        ORANGE	243	87	44
+        GREEN	0	110	61
+        DARKRED	147	25	27
+         */
+    }
+    return ans;
 }
 
 int getBalls(cv::Mat &img, Point2f *points) {
@@ -329,14 +379,18 @@ const double PI = acos(-1);
 Point2f mult(Mat m, Point2f p) {
     double ar[] = {p.x, p.y, 1};
     Point2f ans;
-    for(int i = 0; i < 2; ++i) {
+    for(int i = 0; i < 3; ++i) {
         double sm = 0;
         for(int j = 0; j < 3; ++j) {
             sm += m.at<double>(i, j) * ar[j];
         }
-        int v = int(sm);
+        double v = sm;
         if (i == 0) ans.x = v;
-        else ans.y = v;
+        else if (i == 1) ans.y = v;
+        else {
+            ans.x /= v;
+            ans.y /= v;
+        }
     }
     return ans;
 }
@@ -344,6 +398,7 @@ Point2f mult(Mat m, Point2f p) {
 + (NSArray*) find_table:(UIImage *)image{
     cv::Mat img;
     UIImageToMat(image, img);
+    original_img = img;
  
     [UIImagePNGRepresentation(MatToUIImage(img)) writeToFile: @"/Users/stevenhao/Desktop/tmpoutput/source.png" atomically:YES];
 
@@ -517,7 +572,9 @@ Point2f mult(Mat m, Point2f p) {
         Point2f transform = mult(transmtx, p);
         printf("(transformed at %lf, %lf\n", transform.x, transform.y);
         if (transform.x < 0 || transform.x > H || transform.y < 0 || transform.y > W) continue;
-        [ret setObject: [NSValue valueWithCGPoint: CGPointMake(transform.x, transform.y)] atIndexedSubscript:j];
+        int ballcolor = getColor(p);
+        printf("COLOR = %d\n", ballcolor);
+        [ret setObject: [NSValue valueWithCGPoint: CGPointMake(transform.x, transform.y)] atIndexedSubscript:ballcolor];
     }
     return ret;
 //    [UIImagePNGRepresentation(MatToUIImage(quad)) writeToFile:@"/Users/stevenhao/Desktop/output.png" atomically:YES];
