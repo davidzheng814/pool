@@ -555,16 +555,21 @@ state makeDefaultState() {
 //    printf("%.4lf \n", getBestMove(cur, v));
 //}
 
-+(NSArray *) findAllStates:(NSArray *)balls withSpeed:(double)speed {
++(NSArray *) findAllStates:(NSArray *)balls withFingerPosition:(CGPoint)fingerPosition {
     ball balls_arr[16];
     int ind = 0;
+    const double scale = 0.5;
     for (NSValue *pointValue in balls) {
-        CGPoint point = pointValue.pointValue;
+        CGPoint point = [pointValue CGPointValue];
+        
         double x = point.x;
         double y = point.y;
         ball new_ball;
         new_ball.pos = {x, y};
-        new_ball.vel = {0, 0};
+        if (ind == 0)
+            new_ball.vel = {scale*(fingerPosition.x - x), scale*(fingerPosition.y - y)};
+        else
+            new_ball.vel = {0, 0};
         balls_arr[ind] = new_ball;
         ++ind;
     }
@@ -580,13 +585,13 @@ state makeDefaultState() {
         state &curr_state = states[i];
         NSMutableArray *ns_balls = [[NSMutableArray alloc] init];
         for (int j = 0; j < 16; ++j) {
-            NSMutableArray *ball = [[NSMutableArray alloc] init];
-            for (int k = 0; k < 2; ++k) {
-                
-            }
+            ball ball = curr_state.balls[j];
+            CGPoint point = CGPointMake(ball.pos.X, ball.pos.Y);
+            [ns_balls addObject:[NSValue valueWithCGPoint:point]];
         }
-        [ns_balls addObject:];
+        [output_arr addObject:ns_balls];
     }
+    return output_arr;
 }
 
 @end
