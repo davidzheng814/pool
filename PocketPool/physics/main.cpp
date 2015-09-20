@@ -9,6 +9,9 @@ Gives the best possible to hit the cue ball (balls[0]) at
 idArray is the vector of the id's of balls that we can possibly sink
 -10 is the default "we have no good move" value
     double getBestMove(state cur, std::vector<int> idArray)
+    
+Assuming you can hit any ball
+    double getBestMoveAll(state cur)
 
 Given an angle at which we strike the cue ball, give the vector position of the ghost of the cue ball upon first collision
     vector getGhostImage(state cur, double angle){
@@ -530,11 +533,17 @@ double getBestMove(state cur, std::vector<int> idArray){
   return bestMove;
 }
 
+double getBestMoveAll(state cur){
+  static const int arr[] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+  std::vector<int> v (arr, arr + sizeof(arr) / sizeof(arr[0]) );
+  return getBestMove(cur, v);
+}
+
 //Given an angle at which we strike the cue ball, give the vector position of the ghost of the cue ball upon first collision
 vector getGhostImage(state cur, double angle){
   int n = cur.numballs;
 
-  ball copyCue = ball(vector(cur.balls[0].X, cur.balls[0].Y), -1);
+  ball copyCue = ball(vector(cur.balls[0].pos.X, cur.balls[0].pos.Y), -1);
   copyCue.vel = vector(cos(angle), sin(angle));
 
   double dt = 10000000;
@@ -619,5 +628,6 @@ int main() {
   disp(cur);
   static const int arr[] = {1,2,3};
   std::vector<int> v (arr, arr + sizeof(arr) / sizeof(arr[0]) );
-  printf("%.4lf \n", getBestMove(cur, v));
+  vector ghost = getGhostImage(cur, 0);
+  printf("%.4lf, %.4lf \n", ghost.X, ghost.Y);
 }
