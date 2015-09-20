@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A732D251BAE190400CE6927 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AEAA88F1BAE07D9000DEBB2 /* opencv2.framework */; };
+		5A732D271BAE19C600CE6927 /* Scanner.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A732D261BAE19C600CE6927 /* Scanner.mm */; };
+		5A732D2B1BAE220E00CE6927 /* sample2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5A732D2A1BAE220E00CE6927 /* sample2.jpg */; };
+		5AEAA89C1BAE1440000DEBB2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AEAA89B1BAE1440000DEBB2 /* UIKit.framework */; };
+		5AEAA89E1BAE1447000DEBB2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AEAA89D1BAE1447000DEBB2 /* Foundation.framework */; };
+		5AEAA8A01BAE1452000DEBB2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AEAA89F1BAE1452000DEBB2 /* CoreGraphics.framework */; };
 		C1C4F1DB1BADDB88007D851E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C1C4F1DA1BADDB88007D851E /* main.m */; };
 		C1C4F1DE1BADDB88007D851E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C1C4F1DD1BADDB88007D851E /* AppDelegate.m */; };
 		C1C4F1E11BADDB88007D851E /* UploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1C4F1E01BADDB88007D851E /* UploadViewController.m */; };
@@ -26,6 +32,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5A732D261BAE19C600CE6927 /* Scanner.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Scanner.mm; sourceTree = "<group>"; };
+		5A732D281BAE1A6800CE6927 /* PocketPool-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PocketPool-Prefix.pch"; sourceTree = "<group>"; };
+		5A732D291BAE1B0F00CE6927 /* Scanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scanner.h; sourceTree = "<group>"; };
+		5A732D2A1BAE220E00CE6927 /* sample2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = sample2.jpg; path = PocketPoolTests/sample2.jpg; sourceTree = SOURCE_ROOT; };
+		5AEAA88F1BAE07D9000DEBB2 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = "../../OpenCV-iOS/opencv2.framework"; sourceTree = "<group>"; };
+		5AEAA89B1BAE1440000DEBB2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		5AEAA89D1BAE1447000DEBB2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		5AEAA89F1BAE1452000DEBB2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		C1C4F1D51BADDB88007D851E /* PocketPool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PocketPool.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1C4F1D91BADDB88007D851E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C1C4F1DA1BADDB88007D851E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -46,6 +60,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A732D251BAE190400CE6927 /* opencv2.framework in Frameworks */,
+				5AEAA8A01BAE1452000DEBB2 /* CoreGraphics.framework in Frameworks */,
+				5AEAA89E1BAE1447000DEBB2 /* Foundation.framework in Frameworks */,
+				5AEAA89C1BAE1440000DEBB2 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -62,6 +80,10 @@
 		C1C4F1CC1BADDB88007D851E = {
 			isa = PBXGroup;
 			children = (
+				5AEAA89F1BAE1452000DEBB2 /* CoreGraphics.framework */,
+				5AEAA89D1BAE1447000DEBB2 /* Foundation.framework */,
+				5AEAA89B1BAE1440000DEBB2 /* UIKit.framework */,
+				5AEAA88F1BAE07D9000DEBB2 /* opencv2.framework */,
 				C1C4F1D71BADDB88007D851E /* PocketPool */,
 				C1C4F1F11BADDB88007D851E /* PocketPoolTests */,
 				C1C4F1D61BADDB88007D851E /* Products */,
@@ -86,8 +108,11 @@
 				C1C4F1E01BADDB88007D851E /* UploadViewController.m */,
 				C1C4F2051BADDC31007D851E /* Main.storyboard */,
 				C1C4F1E51BADDB88007D851E /* Images.xcassets */,
+				5A732D2A1BAE220E00CE6927 /* sample2.jpg */,
 				C1C4F1E71BADDB88007D851E /* LaunchScreen.xib */,
 				C1C4F1D81BADDB88007D851E /* Supporting Files */,
+				5A732D261BAE19C600CE6927 /* Scanner.mm */,
+				5A732D291BAE1B0F00CE6927 /* Scanner.h */,
 			);
 			path = PocketPool;
 			sourceTree = "<group>";
@@ -95,6 +120,7 @@
 		C1C4F1D81BADDB88007D851E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				5A732D281BAE1A6800CE6927 /* PocketPool-Prefix.pch */,
 				C1C4F1D91BADDB88007D851E /* Info.plist */,
 				C1C4F1DA1BADDB88007D851E /* main.m */,
 			);
@@ -207,6 +233,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A732D2B1BAE220E00CE6927 /* sample2.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,6 +246,7 @@
 			files = (
 				C1C4F1E11BADDB88007D851E /* UploadViewController.m in Sources */,
 				C1C4F1DE1BADDB88007D851E /* AppDelegate.m in Sources */,
+				5A732D271BAE19C600CE6927 /* Scanner.mm in Sources */,
 				C1C4F1DB1BADDB88007D851E /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -337,6 +365,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/dzd123/Documents/2015-2016/OpenCV-iOS",
+				);
+				GCC_PREFIX_HEADER = "PocketPool/PocketPool-Prefix.pch";
 				INFOPLIST_FILE = PocketPool/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -347,6 +380,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/dzd123/Documents/2015-2016/OpenCV-iOS",
+				);
+				GCC_PREFIX_HEADER = "PocketPool/PocketPool-Prefix.pch";
 				INFOPLIST_FILE = PocketPool/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";

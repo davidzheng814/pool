@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
+#include "Scanner.h"
 
 @interface PocketPoolTests : XCTestCase
 
@@ -27,7 +28,9 @@
 
 - (void)testExample {
     // This is an example of a functional test case.
-    XCTAssert(YES, @"Pass");
+//    XCTAssert(YES, @"Pass");
+    UIImage *image = [UIImage imageNamed:@"sample2.jpg"];
+    [Scanner find_table:image];
 }
 
 - (void)testPerformanceExample {
